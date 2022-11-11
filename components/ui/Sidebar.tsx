@@ -81,7 +81,6 @@ export const Sidebar: FC<Props> = ({ children, navigation }) => {
                   <div className="h-0 flex-1 overflow-y-auto pt-5 pb-4">
                     <div className="flex flex-shrink-0 items-center px-4">
                       <Image
-                        className="h-8 w-auto"
                         src="https://lightit.io/images/Logo.svg"
                         alt="Light-it"
                         width={50}
