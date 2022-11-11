@@ -38,6 +38,12 @@ const LoginPage = () => {
             <ButtonPrimary type="submit">
                 Log in
             </ButtonPrimary>
+
+            <div className="flex justify-center">
+                <Link href="/auth/register">
+                    Don't have an account yet?
+                </Link>
+            </div>
         </Form>
     )
   }
