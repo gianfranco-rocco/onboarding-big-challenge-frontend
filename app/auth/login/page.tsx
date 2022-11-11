@@ -13,6 +13,7 @@ const LoginPage = () => {
                     name="email"
                     type="email"
                     autoComplete="email"
+                    placeholder="johndoe@email.com"
                     required
                 />
             </div>
@@ -23,6 +24,7 @@ const LoginPage = () => {
                     name="password"
                     type="password"
                     autoComplete="current-password"
+                    placeholder="********"
                     required
                 />
             </div>
