@@ -4,12 +4,14 @@ interface Props {
     label: string;
     type: string;
     name: string;
+    defaultValue?: string;
     autoComplete?: string;
     placeholder?: string;
     required?: boolean;
+    disabled?: boolean;
 }
 
-export const Input: FC<Props> = ({ label, type, name, autoComplete, placeholder, required }) => {
+export const Input: FC<Props> = ({ label, type, name, defaultValue, autoComplete, placeholder, required, disabled }) => {
     const id = label.split(' ').join('-').toLowerCase();
 
     return (
@@ -21,9 +23,11 @@ export const Input: FC<Props> = ({ label, type, name, autoComplete, placeholder,
                 id={id}
                 name={name}
                 type={type}
+                defaultValue={defaultValue}
                 autoComplete={autoComplete}
                 required={required}
                 placeholder={placeholder}
+                disabled={disabled}
                 className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
             />
         </>
