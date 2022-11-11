@@ -4,7 +4,7 @@ interface Props {
     label: string;
     type: string;
     name: string;
-    autoComplete: string;
+    autoComplete?: string;
     placeholder?: string;
     required?: boolean;
 }
