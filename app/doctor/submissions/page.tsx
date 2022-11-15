@@ -1,23 +1,12 @@
 'use client'
 
 import React from 'react'
-import { Badge, BadgeType } from '../../../components/ui/badges'
+import { Badge } from '../../../components/ui/badges'
 import { Link } from '../../../components/ui/buttons'
 import { IColumn, IPagination, IRow, Table } from '../../../components/ui/tables'
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
-
-const badgeTypeBasedOnStatus = (status: string): BadgeType => {
-  switch(status) {
-    case 'pending':
-      return 'primary'
-    case 'in-progress':
-      return 'success'
-    case 'done':
-    default:
-      return 'normal'
-  }
-}
+import { badge } from '../../../utils'
 
 const columns: IColumn[] = [
   { field: 'submissionTitle', name: 'submission title', className: 'font-bold' },
@@ -26,7 +15,7 @@ const columns: IColumn[] = [
   { 
     field: 'status', 
     name: 'status',
-    renderCell: (row: IRow) => <Badge type={badgeTypeBasedOnStatus(row.status)} className='capitalize'>{row.status}</Badge>
+    renderCell: (row: IRow) => <Badge type={badge.typeBasedOnStatus(row.status)} className='capitalize'>{row.status}</Badge>
   },
   { 
     field: 'view', 
