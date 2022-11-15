@@ -29,8 +29,8 @@ const columns: IColumn[] = [
     renderCell: (row: IRow) => <Badge type={badgeTypeBasedOnStatus(row.status)} className='capitalize'>{row.status}</Badge>
   },
   { 
-    field: 'edit', 
-    renderCell: (row: IRow) => <Link href={`/doctor/submissions/${row.id}`}>View</Link>
+    field: 'view', 
+    renderCell: (row: IRow) => <Link href={`/doctor/submissions/${row.id}`}>View more</Link>
   }
 ]
 
