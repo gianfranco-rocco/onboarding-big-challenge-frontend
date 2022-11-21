@@ -1,3 +1,5 @@
+'use client'
+
 import React, { FC, useRef } from 'react'
 import { ButtonSecondary } from './ButtonSecondary'
 
