@@ -6,14 +6,14 @@ import { Checkbox, Input } from "../../../components/ui/inputs"
 
 const LoginPage = () => {
     return (
-        <Form title="Log in to your account">
+        <Form title="Welcome to the doctor's app" subtitle='Log in to access unique features'>
             <div>
                 <Input
                     label="Email address"
                     name="email"
                     type="email"
                     autoComplete="email"
-                    placeholder="johndoe@email.com"
+                    placeholder="johndoe@example.com"
                     required
                 />
             </div>
