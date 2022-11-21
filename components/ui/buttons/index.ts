@@ -1,2 +1,6 @@
 export * from './ButtonPrimary'
+export * from './ButtonSecondary'
 export * from './Link'
+export * from './GoBackButton'
+export * from './FileUploadButton'
+export * from './DownloadButton'

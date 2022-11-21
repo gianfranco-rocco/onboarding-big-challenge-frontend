@@ -1,19 +1,9 @@
-'use client'
+import React from 'react'
 
-import React, { FC } from 'react'
-
-interface Props {
-  params: { id: string };
-}
-
-const Head: FC<Props> = ({ params }) => {
-  const { id } = params
-
-  const title = `Submission #${id} | Big Challenge`;
-
+const Head = () => {
   return (
     <>
-      <title>{title}</title>
+      <title>Submission | Big Challenge</title>
     </>
   )
 }
