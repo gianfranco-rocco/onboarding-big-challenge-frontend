@@ -6,28 +6,28 @@ import { Checkbox, Input } from "../../../components/ui/inputs"
 
 const LoginPage = () => {
     return (
-        <Form title="Welcome to the doctor's app" subtitle='Log in to access unique features'>
-            <div>
-                <Input
-                    label="Email address"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder="johndoe@example.com"
-                    required
-                />
-            </div>
+        <Form 
+            title="Welcome to the doctor's app" 
+            subtitle='Log in to access unique features'
+            classNames="sm:mx-auto sm:w-full sm:max-w-md"
+        >
+            <Input
+                label="Email address"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="johndoe@example.com"
+                required
+            />
 
-            <div>
-                <Input
-                    label="Password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    placeholder="********"
-                    required
-                />
-            </div>
+            <Input
+                label="Password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                placeholder="********"
+                required
+            />
 
             <div className="flex items-center justify-between">
                 <Checkbox name="remember-me" label="Remember me" />

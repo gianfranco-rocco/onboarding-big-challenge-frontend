@@ -5,9 +5,10 @@ interface Props {
     title?: string;
     subtitle?: string;
     children: React.ReactNode;
+    classNames?: string;
 }
 
-export const Form: FC<Props> = ({ title, subtitle, children }) => {
+export const Form: FC<Props> = ({ title, subtitle, children, classNames = '' }) => {
     return (
         <>
             {
@@ -25,7 +26,7 @@ export const Form: FC<Props> = ({ title, subtitle, children }) => {
                 </div>
             }
 
-            <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div className={`mt-8 ${classNames}`}>
                 <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
                     <form className="space-y-6">
                         {children}
