@@ -18,7 +18,7 @@ export const PageTitle: FC<Props> = ({ title, subtitle, button }) => {
             {button && <div className='flex items-center'>{button}</div>}
         </div>
 
-        <hr className='my-6' />
+        <hr className='my-4' />
     </>
   )
 }

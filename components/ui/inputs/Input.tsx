@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 interface Props {
     label: string;
-    type: string;
+    type: React.HTMLInputTypeAttribute;
     name: string;
     defaultValue?: string;
     autoComplete?: string;
@@ -14,7 +14,7 @@ interface Props {
 
 export const Input: FC<Props> = ({ 
     label, 
-    type, 
+    type = 'text', 
     name, 
     defaultValue, 
     autoComplete, 
