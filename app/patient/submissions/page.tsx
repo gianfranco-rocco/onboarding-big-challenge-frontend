@@ -7,6 +7,7 @@ import { IColumn, IPagination, IRow, Table } from '../../../components/ui/tables
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
 import { badge } from '../../../utils'
+import { ISelectOption, Select } from '../../../components/ui/inputs'
 
 const columns: IColumn[] = [
   { field: 'submissionTitle', name: 'submission title', className: 'font-bold' },
@@ -23,8 +24,28 @@ const columns: IColumn[] = [
   }
 ]
 
+const submissionStatuses: ISelectOption[] = [
+  {
+    id: '',
+    name: 'All submissions'
+  },
+  {
+    id: 'pending',
+    name: 'Pending'
+  },
+  {
+    id: 'in_progress',
+    name: 'In progress'
+  },
+  {
+    id: 'done',
+    name: 'Done'
+  },
+]
+
 const SubmissionsPage = () => {
   const { get: params } = useSearchParams()
+
   const router = useRouter()
 
   const [rows, setRows] = useState<IRow[]>([
@@ -64,12 +85,26 @@ const SubmissionsPage = () => {
       currentPage
     }))
   }, [currentPage])
+
+  const handleSubmissionStatusChange = (selected: ISelectOption) => {
+    console.log('selected', selected)
+  }
   
   const handlePagination = (page: number) => {
     router.push(`/patient/submissions?page=${page}`)
   }
 
-  return <Table columns={columns} rows={rows} pagination={pagination} handlePagination={handlePagination} />
+  return (
+    <>
+      <div className='flex justify-end'>
+        <div className='sm:w-64 w-full'>
+          <Select options={submissionStatuses} handleChange={handleSubmissionStatusChange} />
+        </div>
+      </div>
+    
+      <Table columns={columns} rows={rows} pagination={pagination} handlePagination={handlePagination} />
+    </>
+  )
 }
 
 export default SubmissionsPage
