@@ -9,6 +9,7 @@ interface Props {
     canBeHidden?: boolean;
     show?: boolean;
     setShow?: React.Dispatch<React.SetStateAction<boolean>>
+    classNames?: string;
 }
 
 const getIcon = (type: ToastType): JSX.Element => {
@@ -28,22 +29,22 @@ const getIcon = (type: ToastType): JSX.Element => {
 const getClassNames = (type: ToastType): string => {
     switch(type) {
         case 'error':
-            return 'bg-red-50 text-red-800'
+            return 'bg-red-100 text-red-800'
         case 'success':
-            return 'bg-green-50 text-green-800'
+            return 'bg-green-100 text-green-800'
         case 'primary':
-            return 'bg-blue-50 text-blue-800'
+            return 'bg-blue-100 text-blue-800'
         case 'secondary':
         default:
-            return 'bg-gray-50 text-gray-800'
+            return 'bg-gray-100 text-gray-800'
     }
 }
 
-export const ToastAlert: FC<Props> = ({ type, children, canBeHidden, show, setShow }) => {
-    if (!show) return null
+export const ToastAlert: FC<Props> = ({ type, children, canBeHidden, show, setShow, classNames = '' }) => {
+    if (show !== undefined && !show) return null
 
     return (
-        <div className={`p-4 rounded-md mt-6 flex justify-between ${getClassNames(type)}`}>
+        <div className={`p-4 rounded-md flex justify-between ${getClassNames(type)} ${classNames}`}>
             <div className='flex gap-2 items-center'>
                 {getIcon(type)}
                 <p className='text-sm'>{children}</p>
