@@ -14,5 +14,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <MainLayout navigation={navigation}>{children}</MainLayout>
+  return <MainLayout navigation={navigation} profilePageHref='/patient/profile'>{children}</MainLayout>
 }

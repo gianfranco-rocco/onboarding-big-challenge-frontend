@@ -19,9 +19,19 @@ const classNames = (...classes: string[]): string => classes.filter(Boolean).joi
 interface Props {
   children: React.ReactNode;
   navigation: INavigation[];
+  profilePageHref?: string;
 }
 
-export const Sidebar: FC<Props> = ({ children, navigation }) => {
+const userProfilePic: JSX.Element = 
+<Image 
+  className="inline-block rounded-full"
+  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+  alt="Avatar"
+  width={36}
+  height={36}
+/>
+
+export const Sidebar: FC<Props> = ({ children, navigation, profilePageHref }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const pathname = usePathname();
@@ -175,18 +185,14 @@ export const Sidebar: FC<Props> = ({ children, navigation }) => {
             </div>
             <div className="flex flex-shrink-0 bg-gray-700 p-4 group block w-full flex-shrink-0">
               <div className="flex items-center">
-                <div>
-                  <Image 
-                    className="inline-block rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt="Avatar"
-                    width={36}
-                    height={36}
-                  />
-                </div>
+                {
+                  profilePageHref
+                  ? <Link href={'/patient/profile'}>{userProfilePic}</Link>
+                  : userProfilePic
+                }
                 <div className="ml-3">
                   <p className="text-sm font-medium text-white">Tom Cook</p>
-                  <button className="text-xs font-medium text-gray-300 group-hover:text-gray-200">Sign out</button>
+                  <button className="text-xs font-medium text-gray-300 hover:text-gray-200">Sign out</button>
                 </div>
               </div>
             </div>
