@@ -1,14 +1,20 @@
+'use client'
+
 import Image from 'next/image';
 import React, { FC } from 'react'
+import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
 
 interface Props {
     title?: string;
     subtitle?: string;
     children: React.ReactNode;
     classNames?: string;
+    onSubmit: SubmitHandler<FieldValues>;
 }
 
-export const Form: FC<Props> = ({ title, subtitle, children, classNames = '' }) => {
+export const Form: FC<Props> = ({ title, subtitle, children, classNames = '', onSubmit }) => {
+    const { register, handleSubmit, formState: { errors } } = useForm()
+
     return (
         <>
             {
@@ -28,8 +34,20 @@ export const Form: FC<Props> = ({ title, subtitle, children, classNames = '' }) 
 
             <div className={`mt-8 ${classNames}`}>
                 <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
-                    <form className="space-y-6">
-                        {children}
+                    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
+                        {React.Children.map(children, (child) => {
+                            if (React.isValidElement(child) && child.props.name) {
+                                return React.createElement(child.type, {
+                                    ...{
+                                        ...child.props,
+                                        register: register,
+                                        key: child.props.name,
+                                        errors
+                                    }
+                                })
+                            }
+                            return child;
+                        })}
                     </form>
                 </div>
             </div>

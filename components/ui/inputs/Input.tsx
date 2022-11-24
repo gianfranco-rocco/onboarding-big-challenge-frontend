@@ -1,5 +1,6 @@
-import React, { FC, useState } from 'react'
-import { useEffect } from 'react';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import React, { FC, useState, useEffect } from 'react'
+import { FieldErrorsImpl, UseFormRegister, FieldValues, RegisterOptions } from 'react-hook-form';
 
 export type SelectOption = {
     id: number | string,
@@ -9,53 +10,62 @@ export type SelectOption = {
 
 interface Props {
     label: string;
-    type?: React.HTMLInputTypeAttribute;
     name: string;
-    defaultValue?: string;
-    autoComplete?: string;
     placeholder?: string;
-    required?: boolean;
-    disabled?: boolean;
-    autoFocus?: boolean;
     leadingAddOn?: React.ReactNode;
     selectOptions?: SelectOption[];
+    register?: UseFormRegister<FieldValues>;
+    validations?: RegisterOptions;
+    errors?: Partial<FieldErrorsImpl<{
+        [x: string]: any;
+    }>>
 }
 
 const classNames = (...classes: string[]): string => {
     return classes.filter(Boolean).join(' ')
 }
 
-export const Input: FC<Props> = ({ 
-    label, 
-    type = 'text',
-    name, 
-    defaultValue, 
-    autoComplete, 
-    placeholder: propPlaceholder, 
-    required, 
-    disabled,
-    autoFocus,
-    leadingAddOn,
-    selectOptions,
-}) => {
+export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (props) => {
+    const {
+        label, 
+        name,
+        placeholder: propPlaceholder, 
+        leadingAddOn,
+        selectOptions,
+        register,
+        validations,
+        errors,
+        ...rest
+    } = props;
+
+    const fieldErrors = (errors && name) ? errors[name] : {}
+
+    const fieldRegistration: UseFormRegister<FieldValues> | {} = register ? {...register(name, validations)} : {}
+
     const id = label.split(' ').join('-').toLowerCase();
+
+    const errorId = `${id}-error`;
 
     const [placeholder, setPlaceholder] = useState('')
     const [selected, setSelected] = useState<number | string>(selectOptions?.length ? selectOptions[0].id : '')
 
     useEffect(() => {
-        const option = selectOptions?.find(option => option.id === selected)
+        const option = selectOptions?.find((option: SelectOption) => option.id === selected)
 
         setPlaceholder(option?.placeholder || propPlaceholder || '')
     }, [selected])
-    
 
     return (
         <div className='w-full'>
             <label htmlFor={id} className="block text-sm font-medium text-gray-700">
                 {label}
             </label>
-            <div className="flex mt-1 rounded-md shadow-sm">
+            <div className={
+                classNames(
+                    (leadingAddOn || selectOptions?.length) ? 'flex' : '',
+                    'mt-1 rounded-md shadow-sm'
+                )
+            }>
                 {
                     leadingAddOn &&
                     <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 sm:text-sm">
@@ -74,23 +84,29 @@ export const Input: FC<Props> = ({
                         </select>
                     </div>
                 }
-                <input
-                    id={id}
-                    name={name}
-                    type={type}
-                    defaultValue={defaultValue}
-                    autoComplete={autoComplete}
-                    required={required}
-                    placeholder={placeholder}
-                    disabled={disabled}
-                    autoFocus={autoFocus}
-                    className={
-                        classNames(
-                            (selectOptions?.length || leadingAddOn) ? 'border-l-0 rounded-r-md' : 'rounded-md',
-                            `block w-full focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border-gray-300`
-                        )
+                <div className='relative'>
+                    <input
+                        id={id}
+                        placeholder={placeholder}
+                        className={
+                            classNames(
+                                (selectOptions?.length || leadingAddOn) ? 'border-l-0 rounded-r-md' : 'rounded-md',
+                                fieldErrors ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
+                                `block w-full sm:text-sm border-gray-300`
+                            )
+                        }
+                        aria-describedby={errorId}
+                        {...fieldRegistration}
+                        {...rest}
+                    />
+                    {
+                        fieldErrors && 
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                            <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+                        </div>
                     }
-                />
+                </div>
+                {fieldErrors?.message && <p className="mt-2 text-sm text-red-600" id={errorId}>{fieldErrors.message as string}</p>}
             </div>
         </div>
     )
