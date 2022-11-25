@@ -40,7 +40,9 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
 
     const fieldErrors = (errors && name) ? errors[name] : {}
 
-    const fieldRegistration: UseFormRegister<FieldValues> | {} = register ? {...register(name, validations)} : {}
+    const registerField = (name: string): UseFormRegister<FieldValues> | {} => {
+        return register ? {...register(name, validations)} : {}
+    }
 
     const id = label.split(' ').join('-').toLowerCase();
 
@@ -78,6 +80,7 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
                         <select
                             className="h-full rounded-l-md border-t-gray-300 border-l-gray-300 border-b-gray-300 border-r-transparent py-0 pl-3 pr-7 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             defaultValue={selected}
+                            {...registerField(`${name}-select`)}
                             onChange={(e) => setSelected(e.target.value)}
                         >
                             {selectOptions.map((option: SelectOption) => <option key={option.id} value={option.id}>{option.name}</option>)}
@@ -96,7 +99,7 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
                             )
                         }
                         aria-describedby={errorId}
-                        {...fieldRegistration}
+                        {...registerField(name)}
                         {...rest}
                     />
                     {
