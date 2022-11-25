@@ -40,6 +40,8 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
 
     const fieldErrors = (errors && name) ? errors[name] : {}
 
+    const hasErrors = fieldErrors && Object.keys(fieldErrors).length > 0
+
     const registerField = (name: string): UseFormRegister<FieldValues> | {} => {
         return register ? {...register(name, validations)} : {}
     }
@@ -94,7 +96,7 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
                         className={
                             classNames(
                                 (selectOptions?.length || leadingAddOn) ? 'border-l-0 rounded-r-md' : 'rounded-md',
-                                fieldErrors ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
+                                hasErrors ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
                                 `block w-full sm:text-sm border-gray-300`
                             )
                         }
@@ -103,7 +105,7 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
                         {...rest}
                     />
                     {
-                        fieldErrors && 
+                        hasErrors && 
                         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                             <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
                         </div>

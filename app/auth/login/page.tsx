@@ -5,6 +5,12 @@ import { Form } from "../../../components/ui/forms/Form"
 import { Checkbox, Input } from "../../../components/ui/inputs"
 import { FieldValues } from 'react-hook-form';
 import { validations } from "../../../utils";
+import { useContext } from "react";
+import { AuthContext } from "../../../context/auth";
+import { toast } from "react-toastify";
+import { config } from "../../../utils/toast";
+import { useRouter } from "next/navigation";
+import paths from "../../../utils/paths";
 
 type FormValues = {
     email: string,
@@ -12,9 +18,20 @@ type FormValues = {
 }
 
 const LoginPage = () => {
-    const onSubmit = (formData: FieldValues) => {
-        const data = formData as FormValues
-        console.log(data)
+    const { login } = useContext(AuthContext)
+
+    const router = useRouter()
+
+    const onSubmit = async (formData: FieldValues) => {
+        const { email, password } = formData as FormValues
+
+        const { success, message, user } = await login(email, password)
+
+        if (success) {
+            router.replace(paths[user!.roles[0].name].home)
+        } else {
+            toast.error(message, config)
+        }
     }
 
     return (
@@ -52,7 +69,7 @@ const LoginPage = () => {
             <div className="flex items-center justify-between">
                 <Checkbox name="remember-me" label="Remember me" />
 
-                <Link href="/auth/forgot-password">
+                <Link href={paths.auth.forgotPassword}>
                     Forgot your password?
                 </Link>
             </div>
@@ -62,7 +79,7 @@ const LoginPage = () => {
             </ButtonPrimary>
 
             <div className="flex justify-center">
-                <Link href="/auth/register">
+                <Link href={paths.auth.register}>
                     Don't have an account yet?
                 </Link>
             </div>

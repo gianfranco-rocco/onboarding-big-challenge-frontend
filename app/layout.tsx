@@ -1,5 +1,8 @@
 import React from 'react'
+import { ToastContainer } from '../client_side_packages'
+import { Providers } from '../providers'
 import '../styles/globals.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function RootLayout({
   children,
@@ -12,7 +15,10 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body>
-        {children}
+        <ToastContainer />
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   )
