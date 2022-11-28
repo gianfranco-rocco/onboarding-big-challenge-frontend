@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import React, { FC } from 'react'
-import { useForm, SubmitHandler, FieldValues } from 'react-hook-form';
+import { useForm, SubmitHandler, FieldValues, UseFormReturn } from 'react-hook-form';
 
 interface Props {
     title?: string;
@@ -12,8 +12,43 @@ interface Props {
     onSubmit: SubmitHandler<FieldValues>;
 }
 
+type ChildType = React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>>
+
+const createReactHookFormEl = (child: ChildType, form: UseFormReturn<FieldValues, any>) => 
+    React.createElement(child.type, {
+        ...{
+            ...child.props,
+            form,
+            key: child.props.name,
+        },
+    })
+
+const renderChildren = (children: React.ReactNode, form: UseFormReturn<FieldValues, any>): React.ReactNode => (
+    React.Children.map(children, (child) => {
+        if (!React.isValidElement(child)) {
+            return child
+        }
+
+        const { children, name } = child.props
+
+        if (children?.length) {
+            return React.createElement(
+                child.type, 
+                {...{...child.props},
+                children: renderChildren(children, form)
+            })
+        }
+
+        if (name) {
+            return createReactHookFormEl(child, form)
+        }
+
+        return child
+    })
+)
+
 export const Form: FC<Props> = ({ title, subtitle, children, classNames = '', onSubmit }) => {
-    const { register, handleSubmit, formState: { errors } } = useForm()
+    const form = useForm()
 
     return (
         <>
@@ -34,20 +69,8 @@ export const Form: FC<Props> = ({ title, subtitle, children, classNames = '', on
 
             <div className={`mt-8 ${classNames}`}>
                 <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
-                    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
-                        {React.Children.map(children, (child) => {
-                            if (React.isValidElement(child) && child.props.name) {
-                                return React.createElement(child.type, {
-                                    ...{
-                                        ...child.props,
-                                        register: register,
-                                        key: child.props.name,
-                                        errors
-                                    }
-                                })
-                            }
-                            return child;
-                        })}
+                    <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)} noValidate>
+                        {renderChildren(children, form)}
                     </form>
                 </div>
             </div>

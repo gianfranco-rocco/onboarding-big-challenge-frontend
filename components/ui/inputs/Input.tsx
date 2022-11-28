@@ -1,6 +1,6 @@
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import React, { FC, useState, useEffect } from 'react'
-import { FieldErrorsImpl, UseFormRegister, FieldValues, RegisterOptions } from 'react-hook-form';
+import { UseFormRegister, FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
 
 export type SelectOption = {
     id: number | string,
@@ -14,11 +14,8 @@ interface Props {
     placeholder?: string;
     leadingAddOn?: React.ReactNode;
     selectOptions?: SelectOption[];
-    register?: UseFormRegister<FieldValues>;
+    form?: UseFormReturn<FieldValues, any>,
     validations?: RegisterOptions;
-    errors?: Partial<FieldErrorsImpl<{
-        [x: string]: any;
-    }>>
 }
 
 const classNames = (...classes: string[]): string => {
@@ -32,11 +29,12 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
         placeholder: propPlaceholder, 
         leadingAddOn,
         selectOptions,
-        register,
+        form,
         validations,
-        errors,
         ...rest
     } = props;
+
+    const { register, formState: { errors } } = form!
 
     const fieldErrors = (errors && name) ? errors[name] : {}
 
@@ -47,7 +45,6 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
     }
 
     const id = label.split(' ').join('-').toLowerCase();
-
     const errorId = `${id}-error`;
 
     const [placeholder, setPlaceholder] = useState('')

@@ -8,6 +8,20 @@ export const isEmail = (email: string): boolean => {
     return !!match;
 };
 
+export const isAlpha = (value: string): boolean => {
+    const match = String(value)
+        .toLowerCase()
+        .match(
+            /^[A-Za-z]+$/
+        );
+
+    return !!match
+}
+
 export const validateEmail = (email: string): string | undefined => {
     return !isEmail(email) ? "This doesn't seem to be a valid email address." : undefined
+}
+
+export const validateAlpha = (value: string): string | undefined => {
+    return !isAlpha(value) ? "This field only accepts alphabetic characters." : undefined
 }

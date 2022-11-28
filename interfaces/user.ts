@@ -14,3 +14,5 @@ export interface IUser {
     info?: IPatientInfo | null;
     roles: IRole[];
 }
+
+export type UserType = 'patient' | 'doctor'
