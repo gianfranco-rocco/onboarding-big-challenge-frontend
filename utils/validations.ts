@@ -12,7 +12,7 @@ export const isAlpha = (value: string): boolean => {
     const match = String(value)
         .toLowerCase()
         .match(
-            /^[A-Za-z]+$/
+            /^[a-zA-Z ]*$/
         );
 
     return !!match

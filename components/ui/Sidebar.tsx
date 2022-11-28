@@ -1,4 +1,4 @@
-import { Fragment, useState, SVGProps, FC } from 'react';
+import { Fragment, useState, SVGProps, FC, useContext } from 'react';
 import { Dialog, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -7,6 +7,7 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { AuthContext } from '../../context/auth';
 
 export interface INavigation {
   name: string;
@@ -22,22 +23,26 @@ interface Props {
   profilePageHref?: string;
 }
 
-const userProfilePic: JSX.Element = 
-<Image 
-  className="inline-block rounded-full"
-  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-  alt="Avatar"
-  width={36}
-  height={36}
-/>
-
 export const Sidebar: FC<Props> = ({ children, navigation, profilePageHref }) => {
+  const { user } = useContext(AuthContext)
+
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const pathname = usePathname();
 
   const navigationIsActive = (href: string): boolean => {
       return pathname === href;
+  }
+
+  const userProfilePic = (): JSX.Element => {
+    const arrName = user!.name.split(' ')
+
+    return (
+      <div className='h-9 w-9 flex items-center justify-center bg-gray-400 rounded-full text-sm text-white'>
+        {arrName[0].charAt(0).toUpperCase()}
+        {arrName[1]?.charAt(0).toUpperCase()}
+      </div>
+    )
   }
 
   return (
@@ -133,7 +138,7 @@ export const Sidebar: FC<Props> = ({ children, navigation, profilePageHref }) =>
                           />
                         </div>
                         <div className="ml-3">
-                          <p className="text-base font-medium text-white">Tom Cook</p>
+                          <p className="text-base font-medium text-white">{user?.name}</p>
                           <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300">View profile</p>
                         </div>
                       </div>
@@ -187,11 +192,11 @@ export const Sidebar: FC<Props> = ({ children, navigation, profilePageHref }) =>
               <div className="flex items-center">
                 {
                   profilePageHref
-                  ? <Link href={profilePageHref}>{userProfilePic}</Link>
-                  : userProfilePic
+                  ? <Link href={profilePageHref}>{userProfilePic()}</Link>
+                  : userProfilePic()
                 }
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-white">Tom Cook</p>
+                  <p className="text-sm font-medium text-white">{user?.name}</p>
                   <button className="text-xs font-medium text-gray-300 hover:text-gray-200">Sign out</button>
                 </div>
               </div>
