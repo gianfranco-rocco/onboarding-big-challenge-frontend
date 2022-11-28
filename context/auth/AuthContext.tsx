@@ -8,10 +8,16 @@ export interface LoginRegisterResponse {
   user?: IUser;
 }
 
+export interface LogoutResponse {
+  success: boolean;
+  message: string;
+}
+
 interface ContextProps {
   user?: IUser;
   login: (email: string, password: string) => Promise<LoginRegisterResponse>;
   register: (data: RegisterFormValues) => Promise<LoginRegisterResponse>;
+  logout: () => Promise<LogoutResponse>;
 }
 
 export const AuthContext = createContext({} as ContextProps);

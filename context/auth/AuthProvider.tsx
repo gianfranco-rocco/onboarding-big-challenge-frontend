@@ -3,7 +3,7 @@ import { api } from '../../api';
 import { IUser } from '../../interfaces';
 import { AuthContext, authReducer } from './';
 import Cookies from 'js-cookie'
-import { LoginRegisterResponse } from './AuthContext'
+import { LoginRegisterResponse, LogoutResponse } from './AuthContext'
 import axios from 'axios'
 import { RegisterFormValues } from '../../app/auth/register/page';
 
@@ -20,13 +20,17 @@ interface ProviderProps {
 }
 
 interface ApiLoginRegisterResponse {
-  message: string,
-  token: string,
-  user: IUser
+  message: string;
+  token: string;
+  user: IUser;
 }
 
-const getErrorMessage = (err: unknown, defaultMessage: string = 'Something went wrong.'): string => {
-  let message = defaultMessage
+interface ApiLogoutResponse {
+  message: string;
+}
+
+const getErrorMessage = (err: unknown, fallback: string = 'Something went wrong.'): string => {
+  let message = fallback
 
   if (axios.isAxiosError(err)) {
     message = err?.response?.data.message || message
@@ -53,7 +57,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
 
       dispatch({ type: 'Login', payload: user })
 
-      Cookies.set('token', token)
+      Cookies.set('XSRF-TOKEN', token)
 
       return {
         success: true,
@@ -80,7 +84,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
 
       dispatch({ type: 'Register', payload: user })
 
-      Cookies.set('token', token)
+      Cookies.set('XSRF-TOKEN', token)
 
       return {
         success: true,
@@ -94,12 +98,37 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
       }
     }
   }
+
+  const logout = async (): Promise<LogoutResponse> => {
+    try {
+      const { data } = await api.post<ApiLogoutResponse>('/logout', undefined, {
+        headers: {
+          'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
+        }
+      })
+
+      Cookies.remove('XSRF-TOKEN')
+
+      dispatch({ type: 'Logout' })
+
+      return {
+        success: true,
+        message: data.message
+      }
+    } catch (err) {
+      return {
+        success: false,
+        message: getErrorMessage(err, 'Something went wrong while attempting to log out.')
+      }
+    }
+  }
   
   return (
     <AuthContext.Provider value={{
       ...state,
       login,
       register,
+      logout
     }}>
       {children}
     </AuthContext.Provider>

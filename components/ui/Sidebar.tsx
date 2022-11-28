@@ -6,8 +6,11 @@ import {
 } from '@heroicons/react/24/outline'
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { AuthContext } from '../../context/auth';
+import { toast } from 'react-toastify';
+import { config } from '../../utils/toast';
+import paths from '../../utils/paths';
 
 export interface INavigation {
   name: string;
@@ -24,18 +27,23 @@ interface Props {
 }
 
 export const Sidebar: FC<Props> = ({ children, navigation, profilePageHref }) => {
-  const { user } = useContext(AuthContext)
+  const { user, logout } = useContext(AuthContext)
+
+  if (!user) {
+    return <></>
+  }
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const pathname = usePathname();
+  const router = useRouter()
 
   const navigationIsActive = (href: string): boolean => {
       return pathname === href;
   }
 
   const userProfilePic = (): JSX.Element => {
-    const arrName = user!.name.split(' ')
+    const arrName = user.name.split(' ')
 
     return (
       <div className='h-9 w-9 flex items-center justify-center bg-gray-400 rounded-full text-sm text-white'>
@@ -43,6 +51,16 @@ export const Sidebar: FC<Props> = ({ children, navigation, profilePageHref }) =>
         {arrName[1]?.charAt(0).toUpperCase()}
       </div>
     )
+  }
+
+  const handleLogout = async () => {
+    const { success, message } = await logout();
+
+    if (success) {
+      router.replace(paths.auth.login)
+    } else {
+      toast.error(message, config)
+    }
   }
 
   return (
@@ -197,7 +215,12 @@ export const Sidebar: FC<Props> = ({ children, navigation, profilePageHref }) =>
                 }
                 <div className="ml-3">
                   <p className="text-sm font-medium text-white">{user?.name}</p>
-                  <button className="text-xs font-medium text-gray-300 hover:text-gray-200">Sign out</button>
+                  <button 
+                    className="text-xs font-medium text-gray-300 hover:text-gray-200"
+                    onClick={handleLogout}
+                  >
+                    Sign out
+                  </button>
                 </div>
               </div>
             </div>
