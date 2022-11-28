@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
 import { Form } from "../../../components/ui/forms/Form"
 import { Input, IRadioOption, RadioGroup } from "../../../components/ui/inputs"
+import paths from '../../../utils/paths';
 
 const userTypes: IRadioOption[] = [
   { id: 'patient', name: 'Patient' },
@@ -67,7 +68,7 @@ const RegisterPage = () => {
             </ButtonPrimary>
 
             <div className="flex justify-center">
-                <Link href="/auth/login">
+                <Link href={paths.auth.login}>
                     Already have an account?
                 </Link>
             </div>

@@ -3,10 +3,13 @@
 import { HomeIcon, PlusCircleIcon } from "@heroicons/react/24/outline"
 import { MainLayout } from "../../components/layouts"
 import { INavigation } from "../../components/ui"
+import paths from "../../utils/paths"
+
+const { patient } = paths
 
 const navigation: INavigation[] = [
-  { name: 'Home', href: '/patient/submissions', icon: HomeIcon },
-  { name: 'New submission', href: '/patient/submissions/create', icon: PlusCircleIcon },
+  { name: 'Home', href: patient.home, icon: HomeIcon },
+  { name: 'New submission', href: patient.createSubmission, icon: PlusCircleIcon },
 ]
 
 export default function RootLayout({
@@ -14,5 +17,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <MainLayout navigation={navigation} profilePageHref='/patient/profile'>{children}</MainLayout>
+  return <MainLayout navigation={navigation} profilePageHref={patient.profile}>{children}</MainLayout>
 }

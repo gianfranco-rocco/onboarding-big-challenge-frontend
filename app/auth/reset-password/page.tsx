@@ -5,16 +5,18 @@ import { useEffect } from "react";
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
 import { Form } from "../../../components/ui/forms/Form"
 import { Input } from "../../../components/ui/inputs"
+import paths from "../../../utils/paths";
 
 const ResetPasswordPage = () => {
   const { get: params } = useSearchParams();
   const router = useRouter();
+  const { auth } = paths
 
   const email = params('email') || '';
 
   useEffect(() => {
     if (!email) {
-      router.replace('/auth/forgot-password')
+      router.replace(auth.forgotPassword)
     }
   }, [email])
 
@@ -57,7 +59,7 @@ const ResetPasswordPage = () => {
           </ButtonPrimary>
 
           <div className="flex justify-center">
-              <Link href="/auth/login">
+              <Link href={auth.login}>
                 Log in
               </Link>
           </div>

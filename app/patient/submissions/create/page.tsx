@@ -1,11 +1,12 @@
 import { GoBackButton, ButtonPrimary } from '../../../../components/ui/buttons'
 import { Input, Textarea } from '../../../../components/ui/inputs'
 import { PageTitle } from '../../../../components/ui/pages'
+import paths from '../../../../utils/paths'
 
 const CreateSubmissionPage = () => {
   return (
     <>
-      <GoBackButton href={'/patient/submissions'} />
+      <GoBackButton href={paths.patient.home} />
 
       <PageTitle title='New submission'/>
 

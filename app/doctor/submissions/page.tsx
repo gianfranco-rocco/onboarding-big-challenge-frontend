@@ -7,6 +7,9 @@ import { IColumn, IPagination, IRow, Table } from '../../../components/ui/tables
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
 import { badge } from '../../../utils'
+import paths from '../../../utils/paths'
+
+const { doctor } = paths
 
 const columns: IColumn[] = [
   { field: 'submissionTitle', name: 'submission title', className: 'font-bold' },
@@ -19,7 +22,7 @@ const columns: IColumn[] = [
   },
   { 
     field: 'view', 
-    renderCell: (row: IRow) => <Link href={`/doctor/submissions/${row.id}`}>View more</Link>
+    renderCell: (row: IRow) => <Link href={doctor.submission.replace(':id', row.id)}>View more</Link>
   }
 ]
 
@@ -66,7 +69,7 @@ const SubmissionsPage = () => {
   }, [currentPage])
   
   const handlePagination = (page: number) => {
-    router.push(`/doctor/submissions?page=${page}`)
+    router.push(`${doctor.home}?page=${page}`)
   }
 
   return <Table columns={columns} rows={rows} pagination={pagination} handlePagination={handlePagination} />

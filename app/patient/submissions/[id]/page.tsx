@@ -4,6 +4,7 @@ import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '../../../..
 import { ToastAlert } from '../../../../components/ui/alerts';
 import { GoBackButton, DownloadButton } from '../../../../components/ui/buttons';
 import { PageTitle } from '../../../../components/ui/pages';
+import paths from '../../../../utils/paths';
 
 const getSubmission = (id: number): ISubmission => ({
     id,
@@ -55,7 +56,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
 
     return (
         <>
-            <GoBackButton href='/patient/submissions' />
+            <GoBackButton href={paths.patient.home} />
 
             <PageTitle
                 title={<SubmissionTitle status={status}>{title}</SubmissionTitle>}

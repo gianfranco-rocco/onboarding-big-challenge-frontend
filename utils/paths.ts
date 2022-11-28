@@ -14,5 +14,6 @@ export default {
         home: '/patient/submissions',
         submission: '/patient/submissions/:id',
         createSubmission: '/patient/submissions/create',
+        profile: '/patient/profile'
     }
 }

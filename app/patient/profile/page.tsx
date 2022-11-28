@@ -2,6 +2,7 @@ import React from 'react'
 import { ButtonPrimary, GoBackButton } from '../../../components/ui/buttons'
 import { Input, SelectOption, Textarea } from '../../../components/ui/inputs'
 import { PageTitle } from '../../../components/ui/pages'
+import paths from '../../../utils/paths'
 
 const weightOptions: SelectOption[] = [
   { id: 'kg', name: 'kg', placeholder: '80' },
@@ -16,7 +17,7 @@ const heightOptions: SelectOption[] = [
 const PatientProfilePage = () => {
   return (
     <>
-      <GoBackButton href='/patient/submissions' />
+      <GoBackButton href={paths.patient.home} />
 
       <PageTitle
         title='Information'

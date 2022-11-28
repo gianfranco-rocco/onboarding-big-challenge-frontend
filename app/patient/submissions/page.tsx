@@ -8,6 +8,9 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
 import { badge } from '../../../utils'
 import { ISelectOption, Select } from '../../../components/ui/inputs'
+import paths from '../../../utils/paths'
+
+const { patient } = paths
 
 const columns: IColumn[] = [
   { field: 'submissionTitle', name: 'submission title', className: 'font-bold' },
@@ -20,7 +23,7 @@ const columns: IColumn[] = [
   },
   { 
     field: 'view', 
-    renderCell: (row: IRow) => <Link href={`/patient/submissions/${row.id}`}>View more</Link>
+    renderCell: (row: IRow) => <Link href={patient.submission.replace(':id', row.id)}>View more</Link>
   }
 ]
 
@@ -91,7 +94,7 @@ const SubmissionsPage = () => {
   }
   
   const handlePagination = (page: number) => {
-    router.push(`/patient/submissions?page=${page}`)
+    router.push(`${patient.home}?page=${page}`)
   }
 
   return (

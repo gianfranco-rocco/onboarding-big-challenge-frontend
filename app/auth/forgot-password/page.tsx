@@ -1,6 +1,7 @@
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
 import { Form } from "../../../components/ui/forms/Form"
 import { Input } from "../../../components/ui/inputs"
+import paths from "../../../utils/paths"
 
 const ForgotPasswordPage = () => {
     return (
@@ -21,7 +22,7 @@ const ForgotPasswordPage = () => {
             </ButtonPrimary>
 
             <div className="flex justify-center">
-                <Link href="/auth/login">
+                <Link href={paths.auth.login}>
                   Log in
                 </Link>
             </div>

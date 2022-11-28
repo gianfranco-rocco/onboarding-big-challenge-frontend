@@ -187,7 +187,7 @@ export const Sidebar: FC<Props> = ({ children, navigation, profilePageHref }) =>
               <div className="flex items-center">
                 {
                   profilePageHref
-                  ? <Link href={'/patient/profile'}>{userProfilePic}</Link>
+                  ? <Link href={profilePageHref}>{userProfilePic}</Link>
                   : userProfilePic
                 }
                 <div className="ml-3">

@@ -6,6 +6,7 @@ import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '../../../..
 import { ToastAlert } from '../../../../components/ui/alerts';
 import { GoBackButton, ButtonPrimary, FileUploadButton, DownloadButton } from '../../../../components/ui/buttons';
 import { PageTitle } from '../../../../components/ui/pages';
+import paths from '../../../../utils/paths';
 
 const getSubmission = (id: number): ISubmission => ({
     id,
@@ -45,6 +46,9 @@ const SubmissionPage: FC<Props> = ({ params }) => {
         patient,
         created_at
     } = submission
+
+    const { doctor } = paths
+
     const [prescription, setPrescription] = useState(null)
 
     const isPending = status === 'pending'
@@ -58,7 +62,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
 
     return (
         <>
-            <GoBackButton href={submission.status === 'pending' ? '/doctor/submissions' : '/doctor/task-history'} />
+            <GoBackButton href={submission.status === 'pending' ? doctor.home : doctor.taskHistory} />
 
             <PageTitle
                 title={<SubmissionTitle status={status}>{title}</SubmissionTitle>}
