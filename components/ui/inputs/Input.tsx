@@ -1,6 +1,6 @@
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import React, { FC, useState, useEffect } from 'react'
 import { UseFormRegister, FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
+import { FieldError, FieldErrorIcon } from '../error';
 
 export type SelectOption = {
     id: number | string,
@@ -101,14 +101,9 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
                         {...registerField(name)}
                         {...rest}
                     />
-                    {
-                        hasErrors && 
-                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                            <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
-                        </div>
-                    }
+                    {hasErrors && <FieldErrorIcon />}
                 </div>
-                {fieldErrors?.message && <p className="mt-2 text-sm text-red-600" id={errorId}>{fieldErrors.message as string}</p>}
+                <FieldError id={id} fieldErrors={fieldErrors} />
             </div>
         </div>
     )

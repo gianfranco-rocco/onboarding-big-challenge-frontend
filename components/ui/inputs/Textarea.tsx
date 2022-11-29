@@ -1,27 +1,39 @@
 import React, { FC } from 'react'
+import { FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
+import { FieldError, FieldErrorIcon } from '../error';
+
+const classNames = (...classes: string[]): string => {
+    return classes.filter(Boolean).join(' ')
+}
 
 interface Props {
     label: string;
     name: string;
-    rows?: number;
-    defaultValue?: string;
-    placeholder?: string;
-    required?: boolean;
-    disabled?: boolean;
-    autoFocus?: boolean;
+    form?: UseFormReturn<FieldValues, any>,
+    validations?: RegisterOptions;
 }
 
-export const Textarea: FC<Props> = ({ 
-    label, 
-    name,
-    rows = 4,
-    defaultValue,  
-    placeholder, 
-    required, 
-    disabled,
-    autoFocus,
-}) => {
+export const Textarea: FC<Props & React.TextareaHTMLAttributes<HTMLTextAreaElement>> = (props) => {
+    const { 
+        label, 
+        name,
+        form,
+        validations,
+        ...rest
+    } = props
+
     const id = label.split(' ').join('-').toLowerCase();
+
+    const errorId = `${id}-error`
+
+    const {
+        register,
+        formState: { errors }
+    } = form!
+
+    const fieldErrors = (errors && name) ? errors[name] : {}
+
+    const hasErrors = fieldErrors && Object.keys(fieldErrors).length > 0
 
     return (
         <div className='w-full'>
@@ -29,17 +41,21 @@ export const Textarea: FC<Props> = ({
                 {label}
             </label>
             <div className="mt-1">
-                <textarea
-                    rows={rows}
-                    name={name}
-                    id={id}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    defaultValue={defaultValue}
-                    required={required}
-                    disabled={disabled}
-                    autoFocus={autoFocus}
-                    placeholder={placeholder}
-                />
+                <div className="relative">
+                    <textarea
+                        id={id}
+                        className={
+                            classNames(
+                                hasErrors ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
+                                'block w-full rounded-md shadow-sm sm:text-sm'
+                            )
+                        }
+                        {...register(name, validations)}
+                        {...rest}
+                    />
+                    {hasErrors && <FieldErrorIcon position='right-0 bottom-2.5' />}
+                </div>
+                <FieldError id={id} fieldErrors={fieldErrors} />
             </div>
         </div>
     )

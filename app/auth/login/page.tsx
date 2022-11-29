@@ -1,7 +1,7 @@
 'use client'
 
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { Form } from "../../../components/ui/forms/Form"
+import { Form } from "../../../components/ui/forms/auth/Form"
 import { Checkbox, Input } from "../../../components/ui/inputs"
 import { FieldValues } from 'react-hook-form';
 import { validations } from "../../../utils";

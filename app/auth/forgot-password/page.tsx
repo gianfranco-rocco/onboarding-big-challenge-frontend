@@ -1,5 +1,5 @@
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { Form } from "../../../components/ui/forms/Form"
+import { Form } from "../../../components/ui/forms/auth/Form"
 import { Input } from "../../../components/ui/inputs"
 import paths from "../../../utils/paths"
 

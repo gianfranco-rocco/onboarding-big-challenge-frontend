@@ -1,7 +1,7 @@
 'use client'
 
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { Form } from "../../../components/ui/forms/Form"
+import { Form } from "../../../components/ui/forms/auth/Form"
 import { Input, IRadioOption, RadioGroup } from "../../../components/ui/inputs"
 import paths from '../../../utils/paths';
 import { FieldValues } from 'react-hook-form';
