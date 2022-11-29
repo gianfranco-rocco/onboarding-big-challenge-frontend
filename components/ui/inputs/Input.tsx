@@ -1,6 +1,10 @@
-import React, { FC, useState, useEffect } from 'react'
-import { UseFormRegister, FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
+'use client'
+
+import React, { FC, useState, useEffect, HTMLInputTypeAttribute } from 'react'
+import { FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
+import { formErrors } from '../../../utils';
 import { FieldError, FieldErrorIcon } from '../error';
+import { ApiError } from '../forms';
 
 export type SelectOption = {
     id: number | string,
@@ -11,11 +15,13 @@ export type SelectOption = {
 interface Props {
     label: string;
     name: string;
+    type?: HTMLInputTypeAttribute;
     placeholder?: string;
     leadingAddOn?: React.ReactNode;
     selectOptions?: SelectOption[];
     form?: UseFormReturn<FieldValues, any>,
     validations?: RegisterOptions;
+    apiErrors?: ApiError;
 }
 
 const classNames = (...classes: string[]): string => {
@@ -26,29 +32,28 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
     const {
         label, 
         name,
+        type = 'text',
         placeholder: propPlaceholder, 
         leadingAddOn,
         selectOptions,
         form,
         validations,
+        apiErrors,
         ...rest
     } = props;
 
-    const { register, formState: { errors } } = form!
+    const { register, formState } = form!
 
-    const fieldErrors = (errors && name) ? errors[name] : {}
+    const [errorMessage, setErrorMessage] = useState('')
 
-    const hasErrors = fieldErrors && Object.keys(fieldErrors).length > 0
-
-    const registerField = (name: string): UseFormRegister<FieldValues> | {} => {
-        return register ? {...register(name, validations)} : {}
-    }
+    useEffect(() => {
+        setErrorMessage(formErrors.getMessage(name, formState, apiErrors))
+    }, [formState, apiErrors])
 
     const id = label.split(' ').join('-').toLowerCase();
-    const errorId = `${id}-error`;
 
     const [placeholder, setPlaceholder] = useState('')
-    const [selected, setSelected] = useState<number | string>(selectOptions?.length ? selectOptions[0].id : '')
+    const [selected, setSelected] = useState(selectOptions?.length ? selectOptions[0].id : '')
 
     useEffect(() => {
         const option = selectOptions?.find((option: SelectOption) => option.id === selected)
@@ -75,36 +80,41 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
                 }
                 {
                     selectOptions?.length && 
-                    <div className="inset-y-0 left-0 flex items-center">
+                    <div className="flex items-center">
                         <select
-                            className="h-full rounded-l-md border-t-gray-300 border-l-gray-300 border-b-gray-300 border-r-transparent py-0 pl-3 pr-7 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            className={
+                                classNames(
+                                    errorMessage ? 'border-red-300 border-r-0 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'border-gray-300 border-r-0 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500',
+                                    'h-full rounded-l-md py-0 pl-3 pr-7 sm:text-sm'
+                                )
+                            }
                             defaultValue={selected}
-                            {...registerField(`${name}-select`)}
+                            {...register(`${name}-select`)}
                             onChange={(e) => setSelected(e.target.value)}
                         >
                             {selectOptions.map((option: SelectOption) => <option key={option.id} value={option.id}>{option.name}</option>)}
                         </select>
                     </div>
                 }
-                <div className='relative'>
+                <div className='relative w-full'>
                     <input
                         id={id}
+                        type={type}
                         placeholder={placeholder}
                         className={
                             classNames(
                                 (selectOptions?.length || leadingAddOn) ? 'border-l-0 rounded-r-md' : 'rounded-md',
-                                hasErrors ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
+                                errorMessage ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
                                 `block w-full sm:text-sm border-gray-300`
                             )
                         }
-                        aria-describedby={errorId}
-                        {...registerField(name)}
+                        {...register(name, validations)}
                         {...rest}
                     />
-                    {hasErrors && <FieldErrorIcon />}
+                    {errorMessage && <FieldErrorIcon />}
                 </div>
-                <FieldError id={id} fieldErrors={fieldErrors} />
             </div>
+            {errorMessage && <FieldError>{errorMessage}</FieldError>}
         </div>
     )
 } 

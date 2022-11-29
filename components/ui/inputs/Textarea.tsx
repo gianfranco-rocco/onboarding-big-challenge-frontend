@@ -1,6 +1,8 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
+import { formErrors } from '../../../utils';
 import { FieldError, FieldErrorIcon } from '../error';
+import { ApiError } from '../forms';
 
 const classNames = (...classes: string[]): string => {
     return classes.filter(Boolean).join(' ')
@@ -11,6 +13,7 @@ interface Props {
     name: string;
     form?: UseFormReturn<FieldValues, any>,
     validations?: RegisterOptions;
+    apiErrors?: ApiError;
 }
 
 export const Textarea: FC<Props & React.TextareaHTMLAttributes<HTMLTextAreaElement>> = (props) => {
@@ -19,21 +22,19 @@ export const Textarea: FC<Props & React.TextareaHTMLAttributes<HTMLTextAreaEleme
         name,
         form,
         validations,
+        apiErrors,
         ...rest
     } = props
 
     const id = label.split(' ').join('-').toLowerCase();
 
-    const errorId = `${id}-error`
+    const { register, formState } = form!
 
-    const {
-        register,
-        formState: { errors }
-    } = form!
+    const [errorMessage, setErrorMessage] = useState('')
 
-    const fieldErrors = (errors && name) ? errors[name] : {}
-
-    const hasErrors = fieldErrors && Object.keys(fieldErrors).length > 0
+    useEffect(() => {
+      setErrorMessage(formErrors.getMessage(name, formState, apiErrors))
+    }, [formState])
 
     return (
         <div className='w-full'>
@@ -46,16 +47,16 @@ export const Textarea: FC<Props & React.TextareaHTMLAttributes<HTMLTextAreaEleme
                         id={id}
                         className={
                             classNames(
-                                hasErrors ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
+                                errorMessage ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
                                 'block w-full rounded-md shadow-sm sm:text-sm'
                             )
                         }
                         {...register(name, validations)}
                         {...rest}
                     />
-                    {hasErrors && <FieldErrorIcon position='right-0 bottom-2.5' />}
+                    {errorMessage && <FieldErrorIcon position='right-0 bottom-2.5' />}
                 </div>
-                <FieldError id={id} fieldErrors={fieldErrors} />
+                {errorMessage && <FieldError>{errorMessage}</FieldError>}
             </div>
         </div>
     )
