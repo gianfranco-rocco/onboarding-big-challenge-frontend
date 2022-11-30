@@ -9,6 +9,8 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { badge } from '../../../utils'
 import { ISelectOption, Select } from '../../../components/ui/inputs'
 import paths from '../../../utils/paths'
+import { useMySubmissions } from '../../../hooks/useMySubmissions';
+import { ISubmission } from '../../../interfaces/submission';
 
 const { patient } = paths
 
@@ -28,69 +30,44 @@ const columns: IColumn[] = [
 ]
 
 const submissionStatuses: ISelectOption[] = [
-  {
-    id: '',
-    name: 'All submissions'
-  },
-  {
-    id: 'pending',
-    name: 'Pending'
-  },
-  {
-    id: 'in_progress',
-    name: 'In progress'
-  },
-  {
-    id: 'done',
-    name: 'Done'
-  },
+  { id: '', name: 'All submissions' },
+  { id: 'pending', name: 'Pending' },
+  { id: 'in_progress', name: 'In progress' },
+  { id: 'done', name: 'Done' },
 ]
 
 const SubmissionsPage = () => {
   const { get: params } = useSearchParams()
-
   const router = useRouter()
 
-  const [rows, setRows] = useState<IRow[]>([
-    {
-      id: 1,
-      submissionTitle: 'Submission 1',
-      doctorAssigned: 'Gianfranco Rocco',
-      createdAt: '2022-10-10',
-      status: 'pending',
-    },
-    {
-      id: 2,
-      submissionTitle: 'Submission 2',
-      doctorAssigned: 'Gianfranco Rocco',
-      createdAt: '2022-10-12',
-      status: 'pending',
-    },
-  ])
+  const page = Number(params('page') || 1)
 
-  const currentPage = Number(params('page') || 1)
-
-  const [pagination, setPagination] = useState<IPagination>({
-    count: 2,
-    total: 330,
-    perPage: 15,
-    currentPage: 1,
-    totalPages: 8,
-    links: {
-      previous: 'asd',
-      next: 'asd'
-    }
-  })
+  const [rows, setRows] = useState<IRow[]>([])
+  const [pagination, setPagination] = useState<IPagination>()
 
   useEffect(() => {
-    setPagination(curr => ({
-      ...curr,
-      currentPage
-    }))
-  }, [currentPage])
+    const getSubmissions = async () => {
+      const { data, links, meta } = await useMySubmissions(page)
+
+      setRows(data.map((submission: ISubmission) => ({
+        id: submission.id,
+        submissionTitle: submission.title,
+        doctorAssigned: submission.doctor?.name,
+        createdAt: submission.created_at,
+        status:submission.status
+      })))
+
+      setPagination({
+        links, 
+        meta
+      })
+    }
+
+    getSubmissions()
+  }, [page])
 
   const handleSubmissionStatusChange = (selected: ISelectOption) => {
-    console.log('selected', selected)
+
   }
   
   const handlePagination = (page: number) => {
