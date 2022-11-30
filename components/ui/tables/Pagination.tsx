@@ -7,7 +7,6 @@ export interface IPaginationLinks {
     last: string;
 }
 export interface IPaginationMeta {
-    count: number;
     total: number;
     per_page: number;
     current_page: number;
@@ -33,7 +32,6 @@ interface Props {
 export const Pagination: FC<Props> = ({ pagination, handlePagination }) => {
     const {
         meta: {
-            count,
             total,
             current_page,
             from = 0,

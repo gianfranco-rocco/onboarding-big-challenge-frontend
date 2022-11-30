@@ -1,3 +1,4 @@
+import { IPaginationLinks, IPaginationMeta } from "../components/ui/tables";
 import { SubmissionStatus } from "../types";
 import { IUser } from "./user";
 
@@ -9,4 +10,10 @@ export interface ISubmission {
     status: SubmissionStatus;
     patient: IUser;
     created_at: string;
+}
+
+export interface GetSubmissionsResponse {
+    data: ISubmission[];
+    links: IPaginationLinks;
+    meta: IPaginationMeta;
 }

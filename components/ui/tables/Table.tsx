@@ -16,7 +16,7 @@ interface Props {
     columns: IColumn[];
     rows: IRow[];
     noRowsText?: string;
-    pagination?: IPagination;
+    pagination: IPagination;
     handlePagination: IHandlePagination;
 }
   
@@ -57,7 +57,7 @@ export const Table: FC<Props> = ({ columns, rows, noRowsText, pagination, handle
                                     }
                                 </tbody>
                             </table>
-                            {(pagination && pagination.count > 0) && <Pagination pagination={pagination} handlePagination={handlePagination} />}
+                            {pagination.meta.total > 0 && <Pagination pagination={pagination} handlePagination={handlePagination} />}
                         </div>
                     </div>
                 </div>

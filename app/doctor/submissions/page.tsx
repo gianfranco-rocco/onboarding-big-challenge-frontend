@@ -8,6 +8,9 @@ import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
 import { badge } from '../../../utils'
 import paths from '../../../utils/paths'
+import { GetSubmissionsResponse, ISubmission } from '../../../interfaces'
+import { api } from '../../../api'
+import Cookies from 'js-cookie'
 
 const { doctor } = paths
 
@@ -30,49 +33,52 @@ const SubmissionsPage = () => {
   const { get: params } = useSearchParams()
   const router = useRouter()
 
-  const [rows, setRows] = useState<IRow[]>([
-    {
-      id: 1,
-      submissionTitle: 'Submission 1',
-      patientName: 'Gianfranco Rocco',
-      createdAt: '2022-10-10',
-      status: 'pending',
-    },
-    {
-      id: 2,
-      submissionTitle: 'Submission 2',
-      patientName: 'Gianfranco Rocco',
-      createdAt: '2022-10-12',
-      status: 'pending',
-    },
-  ])
+  const page = Number(params('page') || 1)
 
-  const currentPage = Number(params('page') || 1)
-
-  const [pagination, setPagination] = useState<IPagination>({
-    count: 2,
-    total: 330,
-    perPage: 15,
-    currentPage: 1,
-    totalPages: 8,
-    links: {
-      previous: 'asd',
-      next: 'asd'
-    }
-  })
+  const [rows, setRows] = useState<IRow[]>([])
+  const [pagination, setPagination] = useState<IPagination>()
 
   useEffect(() => {
-    setPagination(curr => ({
-      ...curr,
-      currentPage
-    }))
-  }, [currentPage])
+    const getPendingSubmissions = async () => {
+      const { data: { data, links, meta } } = await api.get<GetSubmissionsResponse>(`/submissions?page=${page}`, {
+        headers: {
+          'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
+        }
+      })
+
+      setRows(data.map((submission: ISubmission) => ({
+        id: submission.id,
+        submissionTitle: submission.title,
+        patientName: submission.patient.name,
+        createdAt: submission.created_at,
+        status: submission.status
+      })))
+
+      setPagination({
+        links, 
+        meta
+      })
+    }
+
+    getPendingSubmissions()
+  }, [page])
   
   const handlePagination = (page: number) => {
     router.push(`${doctor.home}?page=${page}`)
   }
 
-  return <Table columns={columns} rows={rows} pagination={pagination} handlePagination={handlePagination} />
+  if (!pagination) {
+    return <></>
+  }
+
+  return (
+    <Table 
+      columns={columns} 
+      rows={rows} 
+      pagination={pagination} 
+      handlePagination={handlePagination} 
+    />
+  )
 }
 
 export default SubmissionsPage

@@ -74,6 +74,10 @@ const SubmissionsPage = () => {
     router.push(`${patient.home}?page=${page}`)
   }
 
+  if (!pagination) {
+    return <></>
+  }
+
   return (
     <>
       <div className='flex justify-end'>
@@ -82,7 +86,12 @@ const SubmissionsPage = () => {
         </div>
       </div>
     
-      <Table columns={columns} rows={rows} pagination={pagination} handlePagination={handlePagination} />
+      <Table 
+        columns={columns} 
+        rows={rows} 
+        pagination={pagination} 
+        handlePagination={handlePagination} 
+      />
     </>
   )
 }
