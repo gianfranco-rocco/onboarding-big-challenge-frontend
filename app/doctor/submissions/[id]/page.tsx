@@ -1,44 +1,36 @@
 'use client'
 
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { ISubmission } from '../../../../interfaces';
 import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '../../../../components/ui/submission';
 import { ToastAlert } from '../../../../components/ui/alerts';
 import { GoBackButton, ButtonPrimary, FileUploadButton, DownloadButton } from '../../../../components/ui/buttons';
 import { PageTitle } from '../../../../components/ui/pages';
 import paths from '../../../../utils/paths';
-
-const getSubmission = (id: number): ISubmission => ({
-    id,
-    title: 'Hepatic infarction',
-    symptoms: 'Stomach and abdominal pain, cramps and fever',
-    status: 'in_progress',
-    doctor: null,
-    patient: {
-        id: 3,
-        name: 'Theresa Webb',
-        email: 'theresawebb@example.com',
-        info: {
-            weight: '2',
-            height: '170',
-            info: 'Partial excision (craterization, saucerization, or diaphysectomy) bone (eg, osteomyelitis); proximal or middle phalanx of finger',
-            phone: '(406) 555-0121'
-        },
-        roles: [
-            {
-                name: 'patient'
-            }
-        ]
-    },
-    created_at: '3/2/22'
-})
-
+import { useSubmission } from '../../../../hooks';
 interface Props {
     params: { id: string }
 }
 
 const SubmissionPage: FC<Props> = ({ params }) => {
-    const submission = getSubmission(Number(params.id))
+    const [submission, setSubmission] = useState<ISubmission>()
+    const [showAlert, setShowAlert] = useState(false)
+
+    useEffect(() => {
+        const getSubmission = async () => {
+            const submission = await useSubmission(Number(params.id))
+      
+            setSubmission(submission)
+
+            setShowAlert(submission.status === 'pending')
+          }
+      
+          getSubmission()
+    }, [])
+    
+    if (!submission) {
+        return <></>
+    }
 
     const {
         title,
@@ -49,12 +41,8 @@ const SubmissionPage: FC<Props> = ({ params }) => {
 
     const { doctor } = paths
 
-    const [prescription, setPrescription] = useState(null)
-
     const isPending = status === 'pending'
     const isDone = status === 'done'
-
-    const [showAlert, setShowAlert] = useState(isPending)
 
     const handlePrescriptionUpload = () => {
 
@@ -81,7 +69,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
                 }
             </div>
 
-            {isPending && <ToastAlert show={showAlert} setShow={setShowAlert} type='primary'>Accept this submission to add a prescription</ToastAlert>}
+            {isPending && <ToastAlert show={showAlert} setShow={setShowAlert} type='primary' classNames='mt-6'>Accept this submission to add a prescription</ToastAlert>}
         </>
     )
 }
