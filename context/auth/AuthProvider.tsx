@@ -4,8 +4,8 @@ import { IPatientInfo, IUser } from '../../interfaces';
 import { AuthContext, authReducer } from './';
 import Cookies from 'js-cookie'
 import { LoginRegisterResponse, Response } from './AuthContext'
-import axios from 'axios'
 import { RegisterFormValues } from '../../app/auth/register/page';
+import { api as apiUtils } from '../../utils'
 
 export interface AuthState {
   user?: IUser;
@@ -27,16 +27,6 @@ interface ApiLoginRegisterResponse {
 
 interface ApiLogoutResponse {
   message: string;
-}
-
-const getErrorMessage = (err: unknown, fallback: string = 'Something went wrong.'): string => {
-  let message = fallback
-
-  if (axios.isAxiosError(err)) {
-    message = err?.response?.data.message || message
-  }
-
-  return message
 }
 
 export const AuthProvider: FC<ProviderProps> = ({ children }) => {
@@ -67,7 +57,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
     } catch (err) {
       return {
         success: false,
-        message: getErrorMessage(err, 'Something went wrong while attempting to login.')
+        message: apiUtils.getErrorMessage(err, 'Something went wrong while attempting to login.')
       }
     }
   }
@@ -94,7 +84,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
     } catch (err) {
       return {
         success: false,
-        message: getErrorMessage(err, 'Something went wrong while attempting to register.')
+        message: apiUtils.getErrorMessage(err, 'Something went wrong while attempting to register.')
       }
     }
   }
@@ -118,7 +108,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
     } catch (err) {
       return {
         success: false,
-        message: getErrorMessage(err, 'Something went wrong while attempting to log out.')
+        message: apiUtils.getErrorMessage(err, 'Something went wrong while attempting to log out.')
       }
     }
   }
@@ -139,7 +129,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
     } catch (err) {
       return {
         success: false,
-        message: getErrorMessage(err, 'Something went wrong while attempting to update your profile information.')
+        message: apiUtils.getErrorMessage(err, 'Something went wrong while attempting to update your profile information.')
       }
     }
   }

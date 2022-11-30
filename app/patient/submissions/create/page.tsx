@@ -7,7 +7,11 @@ import { PageTitle } from '../../../../components/ui/pages'
 import paths from '../../../../utils/paths'
 import { FieldValues } from 'react-hook-form';
 import { api } from '../../../../api'
+import { api as apiUtils } from '../../../../utils'
 import Cookies from 'js-cookie'
+import { toast } from 'react-toastify'
+import { config } from '../../../../utils/toast'
+import { useRouter } from 'next/navigation'
 
 interface FormValues {
   title: string;
@@ -15,18 +19,26 @@ interface FormValues {
 }
 
 const CreateSubmissionPage = () => {
+  const router = useRouter()
+
   const onSubmit = async (formData: FieldValues) => {
     const { title, symptoms } = formData as FormValues
 
-    const res = await api.post('/submissions', {
-      title, symptoms
-    }, {
-      headers: {
-        'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
-      }
-    })
-    
-    console.log(res)
+    try {
+      await api.post('/submissions', {
+        title, symptoms
+      }, {
+        headers: {
+          'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
+        }
+      })
+
+      router.replace(paths.patient.home)
+
+      toast.success('Submission created successfully.', config)
+    } catch (err) {
+      toast.error(apiUtils.getErrorMessage(err), config)
+    }
   }
 
   return (
