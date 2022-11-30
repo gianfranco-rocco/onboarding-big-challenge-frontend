@@ -1,11 +1,9 @@
 'use client'
 
-import Cookies from 'js-cookie'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FieldValues } from 'react-hook-form'
-import { api } from '../../../api'
 import { ButtonPrimary, GoBackButton } from '../../../components/ui/buttons'
-import { BaseForm } from '../../../components/ui/forms'
+import { Form } from '../../../components/ui/forms'
 import { Input, Textarea } from '../../../components/ui/inputs'
 import { PageTitle } from '../../../components/ui/pages'
 import { validations } from '../../../utils'
@@ -13,6 +11,8 @@ import paths from '../../../utils/paths'
 import axios from 'axios';
 import { toast } from 'react-toastify'
 import { config } from '../../../utils/toast'
+import { AuthContext } from '../../../context/auth'
+import { IPatientInfo } from '../../../interfaces'
 
 interface FormValues {
   phoneNumber: string;
@@ -24,13 +24,11 @@ interface FormValues {
 const PatientProfilePage = () => {
   const [errors, setErrors] = useState({})
 
+  const { user, updatePatientInfo } = useContext(AuthContext)
+
   const onSubmit = async (formData: FieldValues) => {
     try {
-      await api.post('/info', {...formData} as FormValues, {
-        headers: {
-          'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
-        }
-      })
+      await updatePatientInfo(formData as IPatientInfo)
   
       toast.success('Information updated successfully.', config)
 
@@ -53,10 +51,16 @@ const PatientProfilePage = () => {
         subtitle='You need to complete your profile before adding a submission'
       />
 
-      <BaseForm 
+      <Form 
         classNames='md:w-1/2 w-full flex flex-col gap-6' 
         onSubmit={onSubmit}
         apiErrors={errors}
+        defaultValues={{
+          phone: user?.info?.phone,
+          height: user?.info?.height,
+          weight: user?.info?.weight,
+          info: user?.info?.info,
+        }}
       >
         <Input 
           label='Phone number'
@@ -101,7 +105,7 @@ const PatientProfilePage = () => {
         />
 
         <ButtonPrimary className='md:w-max w-full' type='submit'>Update profile</ButtonPrimary>
-      </BaseForm>
+      </Form>
     </>
   )
 }

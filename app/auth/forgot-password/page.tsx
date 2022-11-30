@@ -1,11 +1,11 @@
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { Form } from "../../../components/ui/forms/auth/Form"
+import { AuthForm } from "../../../components/ui/forms"
 import { Input } from "../../../components/ui/inputs"
 import paths from "../../../utils/paths"
 
 const ForgotPasswordPage = () => {
     return (
-        <Form title="Restore your password">
+        <AuthForm title="Restore your password">
             <div>
                 <Input
                     label="Email address"
@@ -26,7 +26,7 @@ const ForgotPasswordPage = () => {
                   Log in
                 </Link>
             </div>
-        </Form>
+        </AuthForm>
     )
   }
   

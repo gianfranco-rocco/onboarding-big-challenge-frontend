@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { Form } from "../../../components/ui/forms/auth/Form"
+import { AuthForm } from "../../../components/ui/forms"
 import { Input } from "../../../components/ui/inputs"
 import paths from "../../../utils/paths";
 
@@ -21,7 +21,7 @@ const ResetPasswordPage = () => {
   }, [email])
 
   return (
-      <Form title="Create a new password">
+      <AuthForm title="Create a new password">
           <div>
             <Input
                 label="Email address"
@@ -63,7 +63,7 @@ const ResetPasswordPage = () => {
                 Log in
               </Link>
           </div>
-      </Form>
+      </AuthForm>
   )
 }
 

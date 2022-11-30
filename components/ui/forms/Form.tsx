@@ -48,10 +48,13 @@ export interface BaseFormProps {
     classNames?: string;
     onSubmit: SubmitHandler<FieldValues>;
     apiErrors?: ApiError;
+    defaultValues?: any;
 }
 
-export const BaseForm: FC<BaseFormProps> = ({ children, classNames = '', onSubmit, apiErrors }) => {
-    const form = useForm()
+export const Form: FC<BaseFormProps> = ({ children, classNames = '', onSubmit, apiErrors, defaultValues }) => {
+    const form = useForm({
+        defaultValues
+    })
 
     return (
         <form className={`space-y-6 ${classNames}`} onSubmit={form.handleSubmit(onSubmit)} noValidate>

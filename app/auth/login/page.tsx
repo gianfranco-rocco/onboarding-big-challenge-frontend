@@ -1,7 +1,7 @@
 'use client'
 
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { Form } from "../../../components/ui/forms/auth/Form"
+import { AuthForm } from "../../../components/ui/forms"
 import { Checkbox, Input } from "../../../components/ui/inputs"
 import { FieldValues } from 'react-hook-form';
 import { validations } from "../../../utils";
@@ -48,7 +48,7 @@ const LoginPage = () => {
     }
 
     return (
-        <Form 
+        <AuthForm 
             title="Welcome to the doctor's app" 
             subtitle='Log in to access unique features'
             classNames="sm:mx-auto sm:w-full sm:max-w-md"
@@ -96,7 +96,7 @@ const LoginPage = () => {
                     Don't have an account yet?
                 </Link>
             </div>
-        </Form>
+        </AuthForm>
     )
   }
   

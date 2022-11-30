@@ -1,9 +1,9 @@
 import { FC, ReactNode, useReducer } from 'react';
 import { api } from '../../api';
-import { IUser } from '../../interfaces';
+import { IPatientInfo, IUser } from '../../interfaces';
 import { AuthContext, authReducer } from './';
 import Cookies from 'js-cookie'
-import { LoginRegisterResponse, LogoutResponse } from './AuthContext'
+import { LoginRegisterResponse, Response } from './AuthContext'
 import axios from 'axios'
 import { RegisterFormValues } from '../../app/auth/register/page';
 
@@ -99,7 +99,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
     }
   }
 
-  const logout = async (): Promise<LogoutResponse> => {
+  const logout = async (): Promise<Response> => {
     try {
       const { data } = await api.post<ApiLogoutResponse>('/logout', undefined, {
         headers: {
@@ -122,13 +122,35 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
       }
     }
   }
+
+  const updatePatientInfo = async (data: IPatientInfo): Promise<Response> => {
+    try {
+      await api.post('/info', data, {
+        headers: {
+          'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
+        }
+      })
+
+      dispatch({ type: 'Update patient info', payload: data })
+
+      return {
+        success: true,
+      }
+    } catch (err) {
+      return {
+        success: false,
+        message: getErrorMessage(err, 'Something went wrong while attempting to update your profile information.')
+      }
+    }
+  }
   
   return (
     <AuthContext.Provider value={{
       ...state,
       login,
       register,
-      logout
+      logout,
+      updatePatientInfo,
     }}>
       {children}
     </AuthContext.Provider>

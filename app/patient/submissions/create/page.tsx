@@ -1,7 +1,7 @@
 'use client'
 
 import { GoBackButton, ButtonPrimary } from '../../../../components/ui/buttons'
-import { BaseForm } from '../../../../components/ui/forms'
+import { Form } from '../../../../components/ui/forms'
 import { Input, Textarea } from '../../../../components/ui/inputs'
 import { PageTitle } from '../../../../components/ui/pages'
 import paths from '../../../../utils/paths'
@@ -35,7 +35,7 @@ const CreateSubmissionPage = () => {
 
       <PageTitle title='New submission'/>
 
-      <BaseForm classNames='lg:w-1/2' onSubmit={onSubmit}>
+      <Form classNames='lg:w-1/2' onSubmit={onSubmit}>
         <Input 
           label='Title' 
           type='text' 
@@ -58,7 +58,7 @@ const CreateSubmissionPage = () => {
         />
 
         <ButtonPrimary className='w-max' type='submit'>Send submission</ButtonPrimary>
-      </BaseForm>
+      </Form>
     </>
   )
 }

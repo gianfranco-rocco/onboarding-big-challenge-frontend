@@ -2,14 +2,14 @@
 
 import Image from 'next/image';
 import React, { FC } from 'react'
-import { BaseForm, BaseFormProps } from '../BaseForm';
+import { Form, BaseFormProps } from '.';
 
 type Props = BaseFormProps & {
     title?: string;
     subtitle?: string;
 }
 
-export const Form: FC<Props> = ({ title, subtitle, children, classNames = '', onSubmit }) => (
+export const AuthForm: FC<Props> = ({ title, subtitle, children, classNames = '', onSubmit }) => (
     <>
         {
             title && 
@@ -28,7 +28,7 @@ export const Form: FC<Props> = ({ title, subtitle, children, classNames = '', on
 
         <div className={`mt-8 ${classNames}`}>
             <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
-                <BaseForm onSubmit={onSubmit}>{children}</BaseForm>
+                <Form onSubmit={onSubmit}>{children}</Form>
             </div>
         </div>
     </>

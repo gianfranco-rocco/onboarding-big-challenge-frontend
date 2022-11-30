@@ -1,2 +1,2 @@
-export * from './auth/Form'
-export * from './BaseForm'
+export * from './AuthForm'
+export * from './Form'

@@ -1,7 +1,7 @@
 'use client'
 
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { Form } from "../../../components/ui/forms/auth/Form"
+import { AuthForm } from "../../../components/ui/forms"
 import { Input, IRadioOption, RadioGroup } from "../../../components/ui/inputs"
 import paths from '../../../utils/paths';
 import { FieldValues } from 'react-hook-form';
@@ -55,7 +55,7 @@ const RegisterPage = () => {
   }
 
   return (
-        <Form
+        <AuthForm
           title="Welcome to the doctor's app" 
           subtitle="Sign up to access unique features"
           classNames="lg:mx-auto lg:w-1/2"
@@ -129,7 +129,7 @@ const RegisterPage = () => {
                     Already have an account?
                 </Link>
             </div>
-        </Form>
+        </AuthForm>
   )
 }
   
