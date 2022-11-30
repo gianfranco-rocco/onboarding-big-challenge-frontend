@@ -7,9 +7,10 @@ import { FieldValues } from 'react-hook-form';
 import { validations } from "../../../utils";
 import { useContext } from "react";
 import { AuthContext } from "../../../context/auth";
-import { toast, UpdateOptions } from "react-toastify";
+import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import paths from "../../../utils/paths";
+import { config } from "../../../utils/toast";
 
 type FormValues = {
     email: string,
@@ -24,27 +25,13 @@ const LoginPage = () => {
     const onSubmit = async (formData: FieldValues) => {
         const { email, password } = formData as FormValues
 
-        const toastId = toast.loading('Login in, please wait...')
-
         const { success, message, user } = await login(email, password)
 
-        const toastOptions: UpdateOptions = {
-            isLoading: false,
-            autoClose: 3000,
-            render: message,
-            type: 'error'
-        }
-
         if (success) {
-            toastOptions.render = 'Successful login, redirecting to home page.'
-            toastOptions.type = 'success'
-            
-            setTimeout(() => {
-                router.replace(paths[user!.roles[0].name].home)
-            }, 3000);
+            router.replace(paths[user!.roles[0].name].home)
+        } else {
+            toast.error(message, config)
         }
-
-        toast.update(toastId, toastOptions)
     }
 
     return (
