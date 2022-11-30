@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useEffect, useState } from 'react'
+import React, { ChangeEvent, FC, useEffect, useState } from 'react'
 import { ISubmission } from '../../../../interfaces';
 import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '../../../../components/ui/submission';
 import { ToastAlert } from '../../../../components/ui/alerts';
@@ -11,7 +11,7 @@ import { useSubmission } from '../../../../hooks';
 import { api } from '../../../../api';
 import { api as apiUtils } from '../../../../utils';
 import Cookies from 'js-cookie';
-import { toast } from 'react-toastify';
+import { toast, UpdateOptions } from 'react-toastify';
 import { config } from '../../../../utils/toast';
 import { SubmissionStatus } from '../../../../types';
 interface Props {
@@ -22,7 +22,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
     const [submission, setSubmission] = useState<ISubmission>()
     const [showAlert, setShowAlert] = useState(false)
     const [status, setStatus] = useState<SubmissionStatus>('pending')
-    const [prescription, setPrescription] = useState(null)
+    const [prescription, setPrescription] = useState<File>()
 
     useEffect(() => {
         const getSubmission = async () => {
@@ -54,8 +54,14 @@ const SubmissionPage: FC<Props> = ({ params }) => {
     const isInProgress = status === 'in_progress'
     const isDone = status === 'done'
 
-    const handlePrescriptionUpload = () => {
+    const handlePrescriptionUpload = (data: ChangeEvent<HTMLInputElement>) => {
+        const files = data.target.files
 
+        if (!files?.length) return null
+
+        if (files.length > 1) toast.error('Only 1 (one) prescription can be submitted.', config)
+
+        setPrescription(files[0])
     }
 
     const handleAcceptSubmission = async () => {
@@ -75,19 +81,41 @@ const SubmissionPage: FC<Props> = ({ params }) => {
     }
 
     const handleFinishSubmission = async () => {
+        const toastId = toast.loading('Submitting prescription, please wait...')
+
+        const toastOptions: UpdateOptions = {
+            isLoading: false,
+            autoClose: 3000,
+            render: '',
+            type: 'error'
+        }
+
         try {
+            const formData = new FormData()
+            formData.append('uploadedFile', prescription!)
+
+            await api.post(`/upload/${submission.id}`, formData, {
+                headers: {
+                    'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+
             await api.post(`/finish/${submission.id}`, undefined, {
                 headers: {
-                    'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
+                    'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`,
                 }
             })
 
             setStatus('done')
 
-            toast.success('Prescription submitted successfully.', config)
+            toastOptions.type = 'success'
+            toastOptions.render = 'Prescription submitted successfully.'
         } catch (err) {
-            toast.error(apiUtils.getErrorMessage(err), config)
+            toastOptions.render = apiUtils.getErrorMessage(err)
         }
+
+        toast.update(toastId, toastOptions)
     }
 
     return (
@@ -114,8 +142,8 @@ const SubmissionPage: FC<Props> = ({ params }) => {
                 <label className='text-gray-500'>Prescription</label>
                 {
                     isDone 
-                    ? <DownloadButton fileName='Test.txt' fileUrl='https://www.tooltyp.com/wp-content/uploads/2014/10/1900x920-8-beneficios-de-usar-imagenes-en-nuestros-sitios-web.jpg' /> 
-                    : <FileUploadButton label='Prescription' disabled={isPending} handleFileUpload={handlePrescriptionUpload} />
+                    ? <DownloadButton fileName={submission.prescription!} downloadUrl={`http://localhost/api/download/${submission.id}`} /> 
+                    : <FileUploadButton fileName={prescription?.name} disabled={isPending} handleFileUpload={handlePrescriptionUpload} />
                 }
             </div>
 

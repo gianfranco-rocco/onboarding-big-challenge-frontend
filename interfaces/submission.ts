@@ -10,6 +10,7 @@ export interface ISubmission {
     status: SubmissionStatus;
     patient: IUser;
     created_at: string;
+    prescription: string | null;
 }
 
 export interface GetSubmissionsResponse {

@@ -53,7 +53,7 @@ const SubmissionPage: NextPage<Props> = ({ params }: Props) => {
                 <label className='text-gray-500'>Prescription</label>
                 {
                     status === 'done' 
-                    ? <DownloadButton classNames='mt-2' fileName='Test.txt' fileUrl='https://www.tooltyp.com/wp-content/uploads/2014/10/1900x920-8-beneficios-de-usar-imagenes-en-nuestros-sitios-web.jpg' /> 
+                    ? <DownloadButton classNames='mt-2' fileName='Test.txt' downloadUrl='https://www.tooltyp.com/wp-content/uploads/2014/10/1900x920-8-beneficios-de-usar-imagenes-en-nuestros-sitios-web.jpg' /> 
                     : <ToastAlert type='secondary' classNames="mt-2">No prescription has been added yet</ToastAlert>
                 }
             </div>

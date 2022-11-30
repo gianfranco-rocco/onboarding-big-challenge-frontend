@@ -4,11 +4,11 @@ import { Link } from './Link';
 
 interface Props {
     fileName: string;
-    fileUrl: string;
+    downloadUrl: string;
     classNames?: string;
 }
 
-export const DownloadButton: FC<Props> = ({ fileName, fileUrl, classNames = '' }) => {
+export const DownloadButton: FC<Props> = ({ fileName, downloadUrl, classNames = '' }) => {
     return (
         <div className={`p-3 rounded-md flex justify-between border ${classNames}`}>
             <div className='flex gap-2 items-center'>
@@ -16,7 +16,7 @@ export const DownloadButton: FC<Props> = ({ fileName, fileUrl, classNames = '' }
                 <p className='text-sm text-gray-900'>{fileName}</p>
             </div>
 
-            <Link href={fileUrl} target="_blank" download>Download</Link>
+            <Link href={downloadUrl} target="_blank" download>Download</Link>
         </div>
     )
 }

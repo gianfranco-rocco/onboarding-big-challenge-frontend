@@ -4,13 +4,12 @@ import React, { FC, useRef } from 'react'
 import { ButtonSecondary } from './ButtonSecondary'
 
 interface Props {
-    label: string;
+    fileName?: string;
     disabled?: boolean;
-    file?: any;
     handleFileUpload?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-export const FileUploadButton: FC<Props> = ({ disabled, handleFileUpload }) => {
+export const FileUploadButton: FC<Props> = ({ fileName, disabled, handleFileUpload }) => {
     const fileInput: React.LegacyRef<HTMLInputElement> = useRef(null)
     
     return (
@@ -27,7 +26,7 @@ export const FileUploadButton: FC<Props> = ({ disabled, handleFileUpload }) => {
                 <input type="file" className='hidden' ref={fileInput} onChange={handleFileUpload} />
             </div>
 
-            <span className={`${disabled ? 'text-gray-300' : 'text-gray-800'}`}>No file chosen</span>
+            <span className={`${disabled ? 'text-gray-300' : 'text-gray-800'}`}>{fileName || 'No file chosen'}</span>
         </div>
     )
 }
