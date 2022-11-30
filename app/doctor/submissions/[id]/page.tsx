@@ -118,6 +118,31 @@ const SubmissionPage: FC<Props> = ({ params }) => {
         toast.update(toastId, toastOptions)
     }
 
+    const handlePrescriptionDownload = () => {
+        api.get(`/download/${submission.id}`, {
+            headers: {
+                'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
+            }
+        })
+        .then(res => {
+            const binaryData = [res.data]
+
+            // create file link in browser's memory
+            const href = URL.createObjectURL(new Blob(binaryData, { type: 'application/plain' }));
+
+            // create "a" HTML element with href to file & click
+            const link = document.createElement('a');
+            link.href = href;
+            link.setAttribute('download', 'file.txt'); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+
+            // clean up "a" element & remove ObjectURL
+            document.body.removeChild(link);
+            URL.revokeObjectURL(href);
+        })
+    }
+
     return (
         <>
             <GoBackButton href={submission.status === 'pending' ? doctor.home : doctor.taskHistory} />
@@ -142,7 +167,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
                 <label className='text-gray-500'>Prescription</label>
                 {
                     isDone 
-                    ? <DownloadButton fileName={submission.prescription!} downloadUrl={`http://localhost/api/download/${submission.id}`} /> 
+                    ? <DownloadButton fileName={submission.prescription!} handleDownload={handlePrescriptionDownload} /> 
                     : <FileUploadButton fileName={prescription?.name} disabled={isPending} handleFileUpload={handlePrescriptionUpload} />
                 }
             </div>

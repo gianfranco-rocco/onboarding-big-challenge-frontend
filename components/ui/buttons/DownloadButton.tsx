@@ -1,14 +1,12 @@
-import { PaperClipIcon } from '@heroicons/react/24/outline';
 import React, { FC } from 'react'
-import { Link } from './Link';
-
+import { PaperClipIcon } from '@heroicons/react/24/outline';
 interface Props {
     fileName: string;
-    downloadUrl: string;
     classNames?: string;
+    handleDownload: () => void;
 }
 
-export const DownloadButton: FC<Props> = ({ fileName, downloadUrl, classNames = '' }) => {
+export const DownloadButton: FC<Props> = ({ fileName, classNames = '', handleDownload }) => {
     return (
         <div className={`p-3 rounded-md flex justify-between border ${classNames}`}>
             <div className='flex gap-2 items-center'>
@@ -16,7 +14,12 @@ export const DownloadButton: FC<Props> = ({ fileName, downloadUrl, classNames = 
                 <p className='text-sm text-gray-900'>{fileName}</p>
             </div>
 
-            <Link href={downloadUrl} target="_blank" download>Download</Link>
+            <button 
+                className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                onClick={handleDownload}
+            >
+                Download
+            </button>
         </div>
     )
 }
