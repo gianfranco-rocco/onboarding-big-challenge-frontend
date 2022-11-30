@@ -8,6 +8,12 @@ import { GoBackButton, ButtonPrimary, FileUploadButton, DownloadButton } from '.
 import { PageTitle } from '../../../../components/ui/pages';
 import paths from '../../../../utils/paths';
 import { useSubmission } from '../../../../hooks';
+import { api } from '../../../../api';
+import { api as apiUtils } from '../../../../utils';
+import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
+import { config } from '../../../../utils/toast';
+import { SubmissionStatus } from '../../../../types';
 interface Props {
     params: { id: string }
 }
@@ -15,6 +21,8 @@ interface Props {
 const SubmissionPage: FC<Props> = ({ params }) => {
     const [submission, setSubmission] = useState<ISubmission>()
     const [showAlert, setShowAlert] = useState(false)
+    const [status, setStatus] = useState<SubmissionStatus>('pending')
+    const [prescription, setPrescription] = useState(null)
 
     useEffect(() => {
         const getSubmission = async () => {
@@ -22,11 +30,13 @@ const SubmissionPage: FC<Props> = ({ params }) => {
       
             setSubmission(submission)
 
+            setStatus(submission.status)
+
             setShowAlert(submission.status === 'pending')
           }
       
           getSubmission()
-    }, [])
+    }, [status])
     
     if (!submission) {
         return <></>
@@ -34,7 +44,6 @@ const SubmissionPage: FC<Props> = ({ params }) => {
 
     const {
         title,
-        status,
         patient,
         created_at
     } = submission
@@ -42,10 +51,43 @@ const SubmissionPage: FC<Props> = ({ params }) => {
     const { doctor } = paths
 
     const isPending = status === 'pending'
+    const isInProgress = status === 'in_progress'
     const isDone = status === 'done'
 
     const handlePrescriptionUpload = () => {
 
+    }
+
+    const handleAcceptSubmission = async () => {
+        try {
+            await api.post(`/submissions/${submission.id}/assignments`, undefined, {
+                headers: {
+                    'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
+                }
+            })
+
+            setStatus('in_progress')
+
+            toast.success('Submission accepted successfully.', config)
+        } catch (err) {
+            toast.error(apiUtils.getErrorMessage(err), config)
+        }
+    }
+
+    const handleFinishSubmission = async () => {
+        try {
+            await api.post(`/finish/${submission.id}`, undefined, {
+                headers: {
+                    'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
+                }
+            })
+
+            setStatus('done')
+
+            toast.success('Prescription submitted successfully.', config)
+        } catch (err) {
+            toast.error(apiUtils.getErrorMessage(err), config)
+        }
     }
 
     return (
@@ -55,7 +97,15 @@ const SubmissionPage: FC<Props> = ({ params }) => {
             <PageTitle
                 title={<SubmissionTitle status={status}>{title}</SubmissionTitle>}
                 subtitle={<SubmissionSubtitle user={patient.name} createdAt={created_at} />}
-                button={!isDone && <ButtonPrimary>{isPending ? 'Accept submission' : 'Finish submission'}</ButtonPrimary>}
+                button={
+                    !isDone && 
+                    <ButtonPrimary
+                        onClick={isPending ? handleAcceptSubmission : handleFinishSubmission}
+                        disabled={isInProgress && !prescription}
+                    >
+                        {isPending ? 'Accept submission' : 'Finish submission'}
+                    </ButtonPrimary>
+                }
             />
 
             <SubmissionInfo submission={submission} />
