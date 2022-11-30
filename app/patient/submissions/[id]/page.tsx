@@ -1,51 +1,35 @@
-import React, { FC } from 'react'
+'use client'
+
+import React, { useEffect, useState } from 'react'
 import { ISubmission } from '../../../../interfaces';
 import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '../../../../components/ui/submission';
 import { ToastAlert } from '../../../../components/ui/alerts';
 import { GoBackButton, DownloadButton } from '../../../../components/ui/buttons';
 import { PageTitle } from '../../../../components/ui/pages';
 import paths from '../../../../utils/paths';
-
-const getSubmission = (id: number): ISubmission => ({
-    id,
-    title: 'Hepatic infarction',
-    symptoms: 'Stomach and abdominal pain, cramps and fever',
-    status: 'done',
-    doctor: {
-        id: 3,
-        name: 'Gianfranco rocco',
-        email: 'theresawebb@example.com',
-        roles: [
-            {
-                name: 'patient'
-            }
-        ]
-    },
-    patient: {
-        id: 3,
-        name: 'Theresa Webb',
-        email: 'theresawebb@example.com',
-        info: {
-            weight: '2',
-            height: '170',
-            info: 'Partial excision (craterization, saucerization, or diaphysectomy) bone (eg, osteomyelitis); proximal or middle phalanx of finger',
-            phone: '(406) 555-0121'
-        },
-        roles: [
-            {
-                name: 'patient'
-            }
-        ]
-    },
-    created_at: '3/2/22'
-})
+import { useSubmission } from '../../../../hooks';
+import { NextPage } from 'next';
 
 interface Props {
     params: { id: string }
 }
 
-const SubmissionPage: FC<Props> = ({ params }) => {
-    const submission = getSubmission(Number(params.id))
+const SubmissionPage: NextPage<Props> = ({ params }: Props) => {
+    const [submission, setSubmission] = useState<ISubmission>()
+
+    useEffect(() => {
+        const getSubmission = async () => {
+            const submission = await useSubmission(Number(params.id))
+      
+            setSubmission(submission)
+          }
+      
+          getSubmission()
+    }, [])
+    
+    if (!submission) {
+        return <></>
+    }
 
     const {
         title,
