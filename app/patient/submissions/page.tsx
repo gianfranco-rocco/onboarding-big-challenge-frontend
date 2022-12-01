@@ -21,7 +21,7 @@ const columns: IColumn[] = [
   { 
     field: 'status', 
     name: 'status',
-    renderCell: (row: IRow) => <Badge type={badge.typeBasedOnStatus(row.status)} className='capitalize'>{row.status}</Badge>
+    renderCell: (row: IRow) => <Badge type={badge.typeBasedOnStatus(row.status)} className='capitalize'>{row.status.replace('_', ' ')}</Badge>
   },
   { 
     field: 'view', 
@@ -49,12 +49,12 @@ const SubmissionsPage = () => {
     const getSubmissions = async () => {
       const { data, links, meta } = await useMySubmissions(page)
 
-      setRows(data.map((submission: ISubmission) => ({
-        id: submission.id,
-        submissionTitle: submission.title,
-        doctorAssigned: submission.doctor?.name,
-        createdAt: submission.created_at,
-        status:submission.status
+      setRows(data.map(({id, title, doctor, created_at, status }: ISubmission) => ({
+        id,
+        submissionTitle: title,
+        doctorAssigned: doctor?.name,
+        createdAt: created_at,
+        status
       })))
 
       setPagination({

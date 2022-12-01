@@ -41,12 +41,12 @@ const TaskHistoryPage = () => {
     const getSubmissions = async () => {
       const { data, links, meta } = await useMySubmissions(page)
 
-      setRows(data.map((submission: ISubmission) => ({
-        id: submission.id,
-        submissionTitle: submission.title,
-        patientName: submission.patient.name,
-        createdAt: submission.created_at,
-        status:submission.status
+      setRows(data.map(({ id, title, patient, created_at, status }: ISubmission) => ({
+        id,
+        submissionTitle: title,
+        patientName: patient.name,
+        createdAt: created_at,
+        status
       })))
 
       setPagination({
