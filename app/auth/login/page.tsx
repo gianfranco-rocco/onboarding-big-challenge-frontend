@@ -5,7 +5,7 @@ import { AuthForm } from "../../../components/ui/forms"
 import { Checkbox, Input } from "../../../components/ui/inputs"
 import { FieldValues } from 'react-hook-form';
 import { validations } from "../../../utils";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../../context/auth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ type FormValues = {
 }
 
 const LoginPage = () => {
-    const { login } = useContext(AuthContext)
+    const { login, user } = useContext(AuthContext)
 
     const router = useRouter()
 
@@ -33,6 +33,12 @@ const LoginPage = () => {
             toast.error(message, config)
         }
     }
+
+    useEffect(() => {
+        if (user) {
+            router.replace(paths[user!.roles[0].name].home)
+        }
+    }, [user])
 
     return (
         <AuthForm 

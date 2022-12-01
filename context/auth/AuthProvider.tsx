@@ -1,4 +1,4 @@
-import { FC, ReactNode, useReducer } from 'react';
+import { FC, ReactNode, useEffect, useReducer } from 'react';
 import { api } from '../../api';
 import { IPatientInfo, IUser } from '../../interfaces';
 import { AuthContext, authReducer } from './';
@@ -125,6 +125,23 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
       }
     }
   }
+
+  useEffect(() => {
+    const token = Cookies.get('XSRF-TOKEN')
+
+    const authenticateUserByToken = async () => {
+      try {
+        const { data } = await api.get<IUser>('/user')
+  
+        dispatch({ type: 'Login', payload: data })
+      } catch (err) {}
+    }
+
+    if (token) {
+      authenticateUserByToken()
+    }
+  }, [])
+  
   
   return (
     <AuthContext.Provider value={{
