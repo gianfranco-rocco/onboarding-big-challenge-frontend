@@ -27,7 +27,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
     useEffect(() => {
         const getSubmission = async () => {
             const submission = await useSubmission(Number(params.id))
-      
+
             setSubmission(submission)
 
             setStatus(submission.status)
