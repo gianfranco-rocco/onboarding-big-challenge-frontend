@@ -11,8 +11,8 @@ import { useDownloadPrescription, useSubmission } from '../../../../hooks';
 import { api } from '../../../../api';
 import { api as apiUtils } from '../../../../utils';
 import Cookies from 'js-cookie';
-import { toast, UpdateOptions } from 'react-toastify';
-import { config } from '../../../../utils/toast';
+import { toast } from 'react-toastify';
+import { config, position, updateConfig } from '../../../../utils/toast';
 import { SubmissionStatus } from '../../../../types';
 interface Props {
     params: { id: string }
@@ -81,14 +81,11 @@ const SubmissionPage: FC<Props> = ({ params }) => {
     }
 
     const handleFinishSubmission = async () => {
-        const toastId = toast.loading('Submitting prescription, please wait...')
+        const toastId = toast.loading('Submitting prescription, please wait...', {
+            position
+        })
 
-        const toastOptions: UpdateOptions = {
-            isLoading: false,
-            autoClose: 3000,
-            render: '',
-            type: 'error'
-        }
+        const toastOptions = updateConfig
 
         try {
             const formData = new FormData()
@@ -112,6 +109,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
             toastOptions.type = 'success'
             toastOptions.render = 'Prescription submitted successfully.'
         } catch (err) {
+            toastOptions.type = 'error'
             toastOptions.render = apiUtils.getErrorMessage(err)
         }
 

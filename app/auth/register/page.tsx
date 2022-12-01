@@ -10,7 +10,8 @@ import { validations } from '../../../utils';
 import { useContext } from 'react';
 import { AuthContext } from "../../../context/auth";
 import { useRouter } from "next/navigation";
-import { toast, UpdateOptions } from "react-toastify";
+import { toast } from "react-toastify";
+import { position, updateConfig } from "../../../utils/toast";
 
 const userTypes: IRadioOption[] = [
   { id: 'patient', name: 'Patient' },
@@ -31,16 +32,15 @@ const RegisterPage = () => {
   const router = useRouter()
 
   const onSubmit = async (formData: FieldValues) => {
-    const toastId = toast.loading('Signing up, please wait...')
+    const toastId = toast.loading('Signing up, please wait...', {
+      position
+    })
 
     const { success, message, user } = await register(formData as RegisterFormValues)
 
-    const toastOptions: UpdateOptions = {
-      isLoading: false,
-      autoClose: 3000,
-      render: message,
-      type: 'error'
-    }
+    const toastOptions = updateConfig
+    toastOptions.render = message
+    toastOptions.type = 'error'
 
     if (success) {
       toastOptions.render = 'Successful sign up, redirecting to home page.'

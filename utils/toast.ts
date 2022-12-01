@@ -1,7 +1,9 @@
-import { ToastOptions } from 'react-toastify';
+import { ToastOptions, ToastPosition, UpdateOptions } from 'react-toastify';
+
+export const position: ToastPosition = 'bottom-right'
 
 export const config: ToastOptions = {
-    position: 'top-right',
+    position,
     autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: true,
@@ -9,3 +11,11 @@ export const config: ToastOptions = {
     draggable: true,
     progress: undefined,
 };
+
+export const updateConfig: UpdateOptions = {
+    isLoading: false,
+    autoClose: 3000,
+    render: '',
+    type: 'default',
+    position
+}
