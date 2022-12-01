@@ -1,6 +1,6 @@
 'use client'
 
-import React, { ChangeEvent, FC, useEffect, useState } from 'react'
+import React, { ChangeEvent, FC, useContext, useEffect, useState } from 'react'
 import { ISubmission } from '../../../../interfaces';
 import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '../../../../components/ui/submission';
 import { ToastAlert } from '../../../../components/ui/alerts';
@@ -13,11 +13,18 @@ import { api as apiUtils } from '../../../../utils';
 import { toast } from 'react-toastify';
 import { config, position, updateConfig } from '../../../../utils/toast';
 import { SubmissionStatus } from '../../../../types';
+import { useRouter } from 'next/navigation';
+import { AuthContext } from '../../../../context/auth';
+import axios from 'axios';
 interface Props {
     params: { id: string }
 }
 
 const SubmissionPage: FC<Props> = ({ params }) => {
+    const router = useRouter()
+
+    const { user } = useContext(AuthContext)
+
     const [submission, setSubmission] = useState<ISubmission>()
     const [showAlert, setShowAlert] = useState(false)
     const [status, setStatus] = useState<SubmissionStatus>('pending')
@@ -25,13 +32,27 @@ const SubmissionPage: FC<Props> = ({ params }) => {
 
     useEffect(() => {
         const getSubmission = async () => {
-            const submission = await useSubmission(Number(params.id))
+            try {
+                const submission = await useSubmission(Number(params.id))
 
-            setSubmission(submission)
+                const isPending = submission.status === 'pending'
 
-            setStatus(submission.status)
+                if (!isPending && submission.doctor!.id !== user!.id) {
+                    return router.replace(paths.doctor.home)
+                }
 
-            setShowAlert(submission.status === 'pending')
+                setSubmission(submission)
+    
+                setStatus(submission.status)
+    
+                setShowAlert(isPending)
+            } catch (err) {
+                if (axios.isAxiosError(err)) {
+                    if (err.response?.status === 404) {
+                        return router.replace(paths.doctor.home)
+                    }
+                }
+            }
           }
       
           getSubmission()
