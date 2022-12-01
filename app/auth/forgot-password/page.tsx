@@ -1,21 +1,60 @@
+'use client'
+
+import { FieldValues } from "react-hook-form"
+import { toast } from "react-toastify"
+import { api } from "../../../api"
 import { ButtonPrimary, Link } from "../../../components/ui/buttons"
 import { AuthForm } from "../../../components/ui/forms"
 import { Input } from "../../../components/ui/inputs"
+import { validations } from "../../../utils"
+import { getErrorMessage } from "../../../utils/api"
 import paths from "../../../utils/paths"
+import { config } from "../../../utils/toast"
+
+interface FormValues {
+    email: string;
+}
 
 const ForgotPasswordPage = () => {
+    const onSubmit = async (formData: FieldValues) => {
+        const { email } = formData as FormValues
+
+        toast.promise(
+            api.post('/forgot-password', {
+                email
+            }),
+            {
+                pending: 'Validating credentials, please wait...',
+                success: {
+                    render({ data }) {
+                        return `${data?.data.message || data?.data.status}`
+                    }
+                },
+                error: {
+                    render({ data }) {
+                        return getErrorMessage(data)
+                    }
+                }
+            }, config
+        )
+    }
+
     return (
-        <AuthForm title="Restore your password">
-            <div>
-                <Input
-                    label="Email address"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder="johndoe@email.com"
-                    required
-                />
-            </div>
+        <AuthForm 
+            title="Restore your password"
+            onSubmit={onSubmit}
+            classNames="sm:mx-auto sm:w-full sm:max-w-md"
+        >
+            <Input
+                label="Email address"
+                name="email"
+                autoComplete="email"
+                placeholder="johndoe@example.com"
+                validations={{
+                    required: 'This field is required.',
+                    validate: validations.validateEmail
+                }}
+            />
 
             <ButtonPrimary type="submit">
                 Send password recovery email
