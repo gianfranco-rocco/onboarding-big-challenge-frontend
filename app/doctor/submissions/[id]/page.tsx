@@ -7,7 +7,7 @@ import { ToastAlert } from '../../../../components/ui/alerts';
 import { GoBackButton, ButtonPrimary, FileUploadButton, DownloadButton } from '../../../../components/ui/buttons';
 import { PageTitle } from '../../../../components/ui/pages';
 import paths from '../../../../utils/paths';
-import { useSubmission } from '../../../../hooks';
+import { useDownloadPrescription, useSubmission } from '../../../../hooks';
 import { api } from '../../../../api';
 import { api as apiUtils } from '../../../../utils';
 import Cookies from 'js-cookie';
@@ -119,28 +119,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
     }
 
     const handlePrescriptionDownload = () => {
-        api.get(`/download/${submission.id}`, {
-            headers: {
-                'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
-            }
-        })
-        .then(res => {
-            const binaryData = [res.data]
-
-            // create file link in browser's memory
-            const href = URL.createObjectURL(new Blob(binaryData, { type: 'application/plain' }));
-
-            // create "a" HTML element with href to file & click
-            const link = document.createElement('a');
-            link.href = href;
-            link.setAttribute('download', 'file.txt'); //or any other extension
-            document.body.appendChild(link);
-            link.click();
-
-            // clean up "a" element & remove ObjectURL
-            document.body.removeChild(link);
-            URL.revokeObjectURL(href);
-        })
+        useDownloadPrescription(submission.id)
     }
 
     return (

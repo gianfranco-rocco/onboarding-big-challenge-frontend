@@ -7,7 +7,7 @@ import { ToastAlert } from '../../../../components/ui/alerts';
 import { GoBackButton, DownloadButton } from '../../../../components/ui/buttons';
 import { PageTitle } from '../../../../components/ui/pages';
 import paths from '../../../../utils/paths';
-import { useSubmission } from '../../../../hooks';
+import { useDownloadPrescription, useSubmission } from '../../../../hooks';
 import { NextPage } from 'next';
 
 interface Props {
@@ -38,6 +38,10 @@ const SubmissionPage: NextPage<Props> = ({ params }: Props) => {
         created_at
     } = submission
 
+    const handlePrescriptionDownload = () => {
+        useDownloadPrescription(submission.id)
+    }
+
     return (
         <>
             <GoBackButton href={paths.patient.home} />
@@ -53,7 +57,7 @@ const SubmissionPage: NextPage<Props> = ({ params }: Props) => {
                 <label className='text-gray-500'>Prescription</label>
                 {
                     status === 'done' 
-                    ? <DownloadButton classNames='mt-2' fileName='Test.txt' downloadUrl='https://www.tooltyp.com/wp-content/uploads/2014/10/1900x920-8-beneficios-de-usar-imagenes-en-nuestros-sitios-web.jpg' /> 
+                    ? <DownloadButton fileName={submission.prescription!} handleDownload={handlePrescriptionDownload} /> 
                     : <ToastAlert type='secondary' classNames="mt-2">No prescription has been added yet</ToastAlert>
                 }
             </div>
