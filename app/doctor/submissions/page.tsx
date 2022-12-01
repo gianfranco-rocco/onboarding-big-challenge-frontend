@@ -10,7 +10,6 @@ import { badge } from '../../../utils'
 import paths from '../../../utils/paths'
 import { GetSubmissionsResponse, ISubmission } from '../../../interfaces'
 import { api } from '../../../api'
-import Cookies from 'js-cookie'
 
 const { doctor } = paths
 
@@ -40,11 +39,7 @@ const SubmissionsPage = () => {
 
   useEffect(() => {
     const getPendingSubmissions = async () => {
-      const { data: { data, links, meta } } = await api.get<GetSubmissionsResponse>(`/submissions?page=${page}`, {
-        headers: {
-          'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
-        }
-      })
+      const { data: { data, links, meta } } = await api.get<GetSubmissionsResponse>(`/submissions?page=${page}`)
 
       setRows(data.map(({id, title, patient, created_at, status }: ISubmission) => ({
         id,

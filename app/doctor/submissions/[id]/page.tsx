@@ -10,7 +10,6 @@ import paths from '../../../../utils/paths';
 import { useDownloadPrescription, useSubmission } from '../../../../hooks';
 import { api } from '../../../../api';
 import { api as apiUtils } from '../../../../utils';
-import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { config, position, updateConfig } from '../../../../utils/toast';
 import { SubmissionStatus } from '../../../../types';
@@ -66,11 +65,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
 
     const handleAcceptSubmission = async () => {
         try {
-            await api.post(`/submissions/${submission.id}/assignments`, undefined, {
-                headers: {
-                    'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
-                }
-            })
+            await api.post(`/submissions/${submission.id}/assignments`)
 
             setStatus('in_progress')
 
@@ -93,16 +88,11 @@ const SubmissionPage: FC<Props> = ({ params }) => {
 
             await api.post(`/upload/${submission.id}`, formData, {
                 headers: {
-                    'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`,
                     'Content-Type': 'multipart/form-data'
                 }
             })
 
-            await api.post(`/finish/${submission.id}`, undefined, {
-                headers: {
-                    'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`,
-                }
-            })
+            await api.post(`/finish/${submission.id}`)
 
             setStatus('done')
 

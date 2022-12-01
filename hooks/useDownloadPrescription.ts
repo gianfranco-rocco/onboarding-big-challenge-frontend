@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 import { api } from "../api";
 import { api as apiUtils } from "../utils";
@@ -11,11 +10,7 @@ export const useDownloadPrescription = (submissionId: number) => {
 
     const toastOptions = updateConfig
 
-    api.get(`/download/${submissionId}`, {
-        headers: {
-            'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
-        }
-    })
+    api.get(`/download/${submissionId}`)
     .then(res => {
         const binaryData = [res.data]
 

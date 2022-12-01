@@ -91,11 +91,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
 
   const logout = async (): Promise<Response> => {
     try {
-      const { data } = await api.post<ApiLogoutResponse>('/logout', undefined, {
-        headers: {
-          'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
-        }
-      })
+      const { data } = await api.post<ApiLogoutResponse>('/logout')
 
       Cookies.remove('XSRF-TOKEN')
 
@@ -115,11 +111,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
 
   const updatePatientInfo = async (data: IPatientInfo): Promise<Response> => {
     try {
-      await api.post('/info', data, {
-        headers: {
-          'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
-        }
-      })
+      await api.post('/info', data)
 
       dispatch({ type: 'Update patient info', payload: data })
 
