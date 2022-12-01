@@ -1,7 +1,16 @@
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 import { api } from "../api";
+import { api as apiUtils } from "../utils";
+import { position, updateConfig } from "../utils/toast";
 
 export const useDownloadPrescription = (submissionId: number) => {
+    const toastId = toast.loading('Prescription download started, please wait...', {
+        position
+    })
+
+    const toastOptions = updateConfig
+
     api.get(`/download/${submissionId}`, {
         headers: {
             'Authorization': `Bearer ${Cookies.get('XSRF-TOKEN')}`
@@ -23,5 +32,16 @@ export const useDownloadPrescription = (submissionId: number) => {
         // clean up "a" element & remove ObjectURL
         document.body.removeChild(link);
         URL.revokeObjectURL(href);
+
+        toastOptions.type = 'success'
+        toastOptions.render = 'Prescription downloaded successfully.'
+
+        toast.update(toastId, toastOptions)
+    })
+    .catch(err => {
+        toastOptions.type = 'error'
+        toastOptions.render = apiUtils.getErrorMessage(err, 'Something went wrong while attempting to download the prescription.')
+
+        toast.update(toastId, toastOptions)
     })
 }
