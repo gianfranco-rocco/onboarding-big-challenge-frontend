@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { ISubmission } from '../../../../interfaces';
-import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '../../../../components/ui/submission';
-import { ToastAlert } from '../../../../components/ui/alerts';
-import { GoBackButton, DownloadButton } from '../../../../components/ui/buttons';
-import { PageTitle } from '../../../../components/ui/pages';
-import paths from '../../../../utils/paths';
-import { useDownloadPrescription, useSubmission } from '../../../../hooks';
+import { ISubmission } from '@interfaces';
+import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '@components/ui/submission';
+import { ToastAlert } from '@components/ui/alerts';
+import { GoBackButton, DownloadButton } from '@components/ui/buttons';
+import { PageTitle } from '@components/ui/pages';
+import { paths } from '@utils';
+import { useDownloadPrescription, useSubmission } from '@hooks';
 import { NextPage } from 'next';
 
 interface Props {

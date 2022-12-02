@@ -2,17 +2,15 @@
 
 import React, { useContext, useState } from 'react'
 import { FieldValues } from 'react-hook-form'
-import { ButtonPrimary, GoBackButton } from '../../../components/ui/buttons'
-import { Form } from '../../../components/ui/forms'
-import { Input, Textarea } from '../../../components/ui/inputs'
-import { PageTitle } from '../../../components/ui/pages'
-import { validations } from '../../../utils'
-import paths from '../../../utils/paths'
+import { ButtonPrimary, GoBackButton } from '@components/ui/buttons'
+import { Form } from '@components/ui/forms'
+import { Input, Textarea } from '@components/ui/inputs'
+import { PageTitle } from '@components/ui/pages'
+import { validations, paths, toast as toastUtils } from '@utils'
 import axios from 'axios';
 import { toast } from 'react-toastify'
-import { config } from '../../../utils/toast'
-import { AuthContext } from '../../../context/auth'
-import { IPatientInfo } from '../../../interfaces'
+import { AuthContext } from '@context/auth'
+import { IPatientInfo } from '@interfaces'
 
 interface FormValues {
   phoneNumber: string;
@@ -26,18 +24,20 @@ const PatientProfilePage = () => {
 
   const { user, updatePatientInfo } = useContext(AuthContext)
 
+  const toastConfig = toastUtils.config
+
   const onSubmit = async (formData: FieldValues) => {
     try {
       await updatePatientInfo(formData as IPatientInfo)
   
-      toast.success('Information updated successfully.', config)
+      toast.success('Information updated successfully.', toastConfig)
 
       setErrors({})
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setErrors(err.response?.data.errors || {})
       } else {
-        toast.error('Something went wrong while attempting to update your information.', config)
+        toast.error('Something went wrong while attempting to update your information.', toastConfig)
       }
     }
   }

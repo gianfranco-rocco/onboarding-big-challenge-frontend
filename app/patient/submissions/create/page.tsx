@@ -1,15 +1,13 @@
 'use client'
 
-import { GoBackButton, ButtonPrimary } from '../../../../components/ui/buttons'
-import { Form } from '../../../../components/ui/forms'
-import { Input, Textarea } from '../../../../components/ui/inputs'
-import { PageTitle } from '../../../../components/ui/pages'
-import paths from '../../../../utils/paths'
+import { GoBackButton, ButtonPrimary } from '@components/ui/buttons'
+import { Form } from '@components/ui/forms'
+import { Input, Textarea } from '@components/ui/inputs'
+import { PageTitle } from '@components/ui/pages'
+import { paths, api as apiUtils, toast as toastUtils } from '@utils'
 import { FieldValues } from 'react-hook-form';
-import { api } from '../../../../api'
-import { api as apiUtils } from '../../../../utils'
+import { api } from '@api'
 import { toast } from 'react-toastify'
-import { config } from '../../../../utils/toast'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -23,6 +21,8 @@ const CreateSubmissionPage = () => {
 
   const [loading, setLoading] = useState(false)
 
+  const toastConfig = toastUtils.config
+
   const onSubmit = async (formData: FieldValues) => {
     const { title, symptoms } = formData as FormValues
 
@@ -35,9 +35,9 @@ const CreateSubmissionPage = () => {
 
       router.replace(paths.patient.home)
 
-      toast.success('Submission created successfully.', config)
+      toast.success('Submission created successfully.', toastConfig)
     } catch (err) {
-      toast.error(apiUtils.getErrorMessage(err), config)
+      toast.error(apiUtils.getErrorMessage(err), toastConfig)
     }
 
     setLoading(false)
