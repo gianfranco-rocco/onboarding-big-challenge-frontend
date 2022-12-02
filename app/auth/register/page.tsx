@@ -1,17 +1,15 @@
 'use client'
 
-import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { AuthForm } from "../../../components/ui/forms"
-import { Input, IRadioOption, RadioGroup } from "../../../components/ui/inputs"
-import paths from '../../../utils/paths';
+import { ButtonPrimary, Link } from "@components/ui/buttons"
+import { AuthForm } from "@components/ui/forms"
+import { Input, IRadioOption, RadioGroup } from "@components/ui/inputs"
+import { paths, validations, toast as toastUtils } from "@utils";
 import { FieldValues } from 'react-hook-form';
-import { UserType } from '../../../interfaces';
-import { validations } from '../../../utils';
+import { UserType } from "@interfaces";
 import { useContext, useState } from 'react';
-import { AuthContext } from "../../../context/auth";
+import { AuthContext } from "@context/auth";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { position, updateConfig } from "../../../utils/toast";
 
 const userTypes: IRadioOption[] = [
   { id: 'patient', name: 'Patient' },
@@ -37,12 +35,12 @@ const RegisterPage = () => {
     setLoading(true)
 
     const toastId = toast.loading('Signing up, please wait...', {
-      position
+      position: toastUtils.position
     })
 
     const { success, message, user } = await register(formData as RegisterFormValues)
 
-    const toastOptions = updateConfig
+    const toastOptions = toastUtils.updateConfig
     toastOptions.render = message
     toastOptions.type = 'error'
     toastOptions.pauseOnHover = false

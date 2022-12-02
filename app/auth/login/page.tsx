@@ -1,16 +1,14 @@
 'use client'
 
-import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { AuthForm } from "../../../components/ui/forms"
-import { Checkbox, Input } from "../../../components/ui/inputs"
+import { ButtonPrimary, Link } from "@components/ui/buttons"
+import { AuthForm } from "@components/ui/forms"
+import { Checkbox, Input } from "@components/ui/inputs"
 import { FieldValues } from 'react-hook-form';
-import { validations } from "../../../utils";
+import { validations, paths, toast as toastUtils } from "@utils";
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../../context/auth";
+import { AuthContext } from "@context/auth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import paths from "../../../utils/paths";
-import { config } from "../../../utils/toast";
 
 type FormValues = {
     email: string,
@@ -34,7 +32,7 @@ const LoginPage = () => {
         if (success) {
             router.replace(paths[user!.roles[0].name].home)
         } else {
-            toast.error(message, config)
+            toast.error(message, toastUtils.config)
         }
 
         setLoading(false)

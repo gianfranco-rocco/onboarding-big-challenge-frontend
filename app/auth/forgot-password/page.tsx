@@ -3,14 +3,11 @@
 import { useState } from "react"
 import { FieldValues } from "react-hook-form"
 import { toast } from "react-toastify"
-import { api } from "../../../api"
-import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { AuthForm } from "../../../components/ui/forms"
-import { Input } from "../../../components/ui/inputs"
-import { validations } from "../../../utils"
-import { getErrorMessage } from "../../../utils/api"
-import paths from "../../../utils/paths"
-import { config } from "../../../utils/toast"
+import { api } from "@api"
+import { ButtonPrimary, Link } from "@components/ui/buttons"
+import { AuthForm } from "@components/ui/forms"
+import { Input } from "@components/ui/inputs"
+import { paths, validations, api as apiUtils, toast as toastUtils } from "@utils"
 
 interface FormValues {
     email: string;
@@ -39,10 +36,10 @@ const ForgotPasswordPage = () => {
                 error: {
                     render({ data }) {
                         setLoading(false)
-                        return getErrorMessage(data)
+                        return apiUtils.getErrorMessage(data)
                     }
                 },
-            }, config
+            }, toastUtils.config
         )
     }
 

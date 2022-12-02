@@ -2,16 +2,14 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ButtonPrimary, Link } from "../../../components/ui/buttons"
-import { AuthForm } from "../../../components/ui/forms"
-import { Input } from "../../../components/ui/inputs"
-import paths from "../../../utils/paths";
+import { ButtonPrimary, Link } from "@components/ui/buttons"
+import { AuthForm } from "@components/ui/forms"
+import { Input } from "@components/ui/inputs"
+import { paths, api as apiUtils, toast as toastUtils } from "@utils";
 import { FieldValues } from 'react-hook-form';
-import { validations } from "../../../utils";
-import { api } from "../../../api";
+import { validations } from "@utils";
+import { api } from "@api";
 import { toast } from "react-toastify";
-import { api as apiUtils } from "../../../utils";
-import { config } from "../../../utils/toast";
 
 interface FormValues {
   email: string;
@@ -42,11 +40,11 @@ const ResetPasswordPage = () => {
         token
       })
 
-      toast.success(status, config)
+      toast.success(status, toastUtils.config)
 
       return router.replace(paths.auth.login)
     } catch (err) {
-      toast.error(apiUtils.getErrorMessage(err), config)
+      toast.error(apiUtils.getErrorMessage(err), toastUtils.config)
     }
 
     setLoading(false)
