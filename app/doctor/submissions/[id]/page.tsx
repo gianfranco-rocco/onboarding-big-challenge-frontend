@@ -29,6 +29,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
     const [showAlert, setShowAlert] = useState(false)
     const [status, setStatus] = useState<SubmissionStatus>('pending')
     const [prescription, setPrescription] = useState<File>()
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const getSubmission = async () => {
@@ -97,6 +98,8 @@ const SubmissionPage: FC<Props> = ({ params }) => {
     }
 
     const handleFinishSubmission = async () => {
+        setLoading(true)
+
         const toastId = toast.loading('Submitting prescription, please wait...', {
             position
         })
@@ -125,6 +128,8 @@ const SubmissionPage: FC<Props> = ({ params }) => {
         }
 
         toast.update(toastId, toastOptions)
+
+        setLoading(false)
     }
 
     const handlePrescriptionDownload = () => {
@@ -142,7 +147,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
                     !isDone && 
                     <ButtonPrimary
                         onClick={isPending ? handleAcceptSubmission : handleFinishSubmission}
-                        disabled={isInProgress && !prescription}
+                        disabled={(isInProgress && !prescription) || loading}
                     >
                         {isPending ? 'Accept submission' : 'Finish submission'}
                     </ButtonPrimary>

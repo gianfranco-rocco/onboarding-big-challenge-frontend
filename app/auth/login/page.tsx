@@ -5,7 +5,7 @@ import { AuthForm } from "../../../components/ui/forms"
 import { Checkbox, Input } from "../../../components/ui/inputs"
 import { FieldValues } from 'react-hook-form';
 import { validations } from "../../../utils";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../../context/auth";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -20,10 +20,14 @@ type FormValues = {
 const LoginPage = () => {
     const { login, user } = useContext(AuthContext)
 
+    const [loading, setLoading] = useState(false)
+
     const router = useRouter()
 
     const onSubmit = async (formData: FieldValues) => {
         const { email, password } = formData as FormValues
+
+        setLoading(true)
 
         const { success, message, user } = await login(email, password)
 
@@ -32,6 +36,8 @@ const LoginPage = () => {
         } else {
             toast.error(message, config)
         }
+
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -80,7 +86,7 @@ const LoginPage = () => {
                 </Link>
             </div>
 
-            <ButtonPrimary type="submit">
+            <ButtonPrimary type="submit" disabled={loading}>
                 Log in
             </ButtonPrimary>
 

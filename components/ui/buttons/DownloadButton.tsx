@@ -4,9 +4,10 @@ interface Props {
     fileName: string;
     classNames?: string;
     handleDownload: () => void;
+    disabled?: boolean;
 }
 
-export const DownloadButton: FC<Props> = ({ fileName, classNames = '', handleDownload }) => {
+export const DownloadButton: FC<Props> = ({ fileName, classNames = '', handleDownload, disabled }) => {
     return (
         <div className={`p-3 rounded-md flex justify-between border ${classNames}`}>
             <div className='flex gap-2 items-center'>

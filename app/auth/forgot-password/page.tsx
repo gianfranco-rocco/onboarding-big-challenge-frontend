@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from "react"
 import { FieldValues } from "react-hook-form"
 import { toast } from "react-toastify"
 import { api } from "../../../api"
@@ -16,8 +17,12 @@ interface FormValues {
 }
 
 const ForgotPasswordPage = () => {
+    const [loading, setLoading] = useState(false)
+
     const onSubmit = async (formData: FieldValues) => {
         const { email } = formData as FormValues
+
+        setLoading(true)
 
         toast.promise(
             api.post('/forgot-password', {
@@ -27,14 +32,16 @@ const ForgotPasswordPage = () => {
                 pending: 'Validating credentials, please wait...',
                 success: {
                     render({ data }) {
+                        setLoading(false)
                         return `${data?.data.message || data?.data.status}`
                     }
                 },
                 error: {
                     render({ data }) {
+                        setLoading(false)
                         return getErrorMessage(data)
                     }
-                }
+                },
             }, config
         )
     }
@@ -56,7 +63,7 @@ const ForgotPasswordPage = () => {
                 }}
             />
 
-            <ButtonPrimary type="submit">
+            <ButtonPrimary type="submit" disabled={loading}>
                 Send password recovery email
             </ButtonPrimary>
 

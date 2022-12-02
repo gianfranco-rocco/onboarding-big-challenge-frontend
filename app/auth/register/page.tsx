@@ -7,7 +7,7 @@ import paths from '../../../utils/paths';
 import { FieldValues } from 'react-hook-form';
 import { UserType } from '../../../interfaces';
 import { validations } from '../../../utils';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from "../../../context/auth";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -31,7 +31,11 @@ const RegisterPage = () => {
 
   const router = useRouter()
 
+  const [loading, setLoading] = useState(false)
+
   const onSubmit = async (formData: FieldValues) => {
+    setLoading(true)
+
     const toastId = toast.loading('Signing up, please wait...', {
       position
     })
@@ -41,6 +45,7 @@ const RegisterPage = () => {
     const toastOptions = updateConfig
     toastOptions.render = message
     toastOptions.type = 'error'
+    toastOptions.pauseOnHover = false
 
     if (success) {
       toastOptions.render = 'Successful sign up, redirecting to home page.'
@@ -49,6 +54,8 @@ const RegisterPage = () => {
       setTimeout(() => {
         router.replace(paths[user!.roles[0].name].home)
       }, 3000);
+    } else {
+      setLoading(false)
     }
 
     toast.update(toastId, toastOptions)
@@ -120,7 +127,7 @@ const RegisterPage = () => {
               }}
             />
 
-            <ButtonPrimary type="submit">
+            <ButtonPrimary type="submit" disabled={loading}>
                 Register
             </ButtonPrimary>
 

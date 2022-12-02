@@ -11,6 +11,7 @@ import { api as apiUtils } from '../../../../utils'
 import { toast } from 'react-toastify'
 import { config } from '../../../../utils/toast'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 interface FormValues {
   title: string;
@@ -20,10 +21,14 @@ interface FormValues {
 const CreateSubmissionPage = () => {
   const router = useRouter()
 
+  const [loading, setLoading] = useState(false)
+
   const onSubmit = async (formData: FieldValues) => {
     const { title, symptoms } = formData as FormValues
 
     try {
+      setLoading(true)
+
       await api.post('/submissions', {
         title, symptoms
       })
@@ -34,6 +39,8 @@ const CreateSubmissionPage = () => {
     } catch (err) {
       toast.error(apiUtils.getErrorMessage(err), config)
     }
+
+    setLoading(false)
   }
 
   return (
@@ -64,7 +71,13 @@ const CreateSubmissionPage = () => {
           }}
         />
 
-        <ButtonPrimary className='w-max' type='submit'>Send submission</ButtonPrimary>
+        <ButtonPrimary 
+          className='w-max' 
+          type='submit'
+          disabled={loading}
+        >
+          Send submission
+        </ButtonPrimary>
       </Form>
     </>
   )
