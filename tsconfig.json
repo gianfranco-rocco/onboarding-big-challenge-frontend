@@ -31,7 +31,7 @@
       "@interfaces": ["interfaces"],
       "@providers/*": ["providers/"],
       "@styles/*": ["styles/*"],
-      "@types/*": ["types/"],
+      "@types": ["types"],
       "@utils": ["utils"],
       "@api": ["api"]
     }

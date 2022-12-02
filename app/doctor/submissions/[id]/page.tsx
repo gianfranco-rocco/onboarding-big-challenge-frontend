@@ -1,20 +1,18 @@
 'use client'
 
 import React, { ChangeEvent, FC, useContext, useEffect, useState } from 'react'
-import { ISubmission } from '../../../../interfaces';
-import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '../../../../components/ui/submission';
-import { ToastAlert } from '../../../../components/ui/alerts';
-import { GoBackButton, ButtonPrimary, FileUploadButton, DownloadButton } from '../../../../components/ui/buttons';
-import { PageTitle } from '../../../../components/ui/pages';
-import paths from '../../../../utils/paths';
-import { useDownloadPrescription, useSubmission } from '../../../../hooks';
-import { api } from '../../../../api';
-import { api as apiUtils } from '../../../../utils';
+import { ISubmission } from '@interfaces';
+import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '@components/ui/submission';
+import { ToastAlert } from '@components/ui/alerts';
+import { GoBackButton, ButtonPrimary, FileUploadButton, DownloadButton } from '@components/ui/buttons';
+import { PageTitle } from '@components/ui/pages';
+import { useDownloadPrescription, useSubmission } from '@hooks';
+import { api } from '@api';
 import { toast } from 'react-toastify';
-import { config, position, updateConfig } from '../../../../utils/toast';
-import { SubmissionStatus } from '../../../../types';
+import { toast as toastUtils, api as apiUtils, paths } from '@utils';
+import { SubmissionStatus } from '@types';
 import { useRouter } from 'next/navigation';
-import { AuthContext } from '../../../../context/auth';
+import { AuthContext } from '@context/auth';
 import axios from 'axios';
 interface Props {
     params: { id: string }
@@ -74,13 +72,15 @@ const SubmissionPage: FC<Props> = ({ params }) => {
     const isPending = status === 'pending'
     const isInProgress = status === 'in_progress'
     const isDone = status === 'done'
+    
+    const toastConfig = toastUtils.config
 
     const handlePrescriptionUpload = (data: ChangeEvent<HTMLInputElement>) => {
         const files = data.target.files
 
         if (!files?.length) return null
 
-        if (files.length > 1) toast.error('Only 1 (one) prescription can be submitted.', config)
+        if (files.length > 1) toast.error('Only 1 (one) prescription can be submitted.', toastConfig)
 
         setPrescription(files[0])
     }
@@ -91,9 +91,9 @@ const SubmissionPage: FC<Props> = ({ params }) => {
 
             setStatus('in_progress')
 
-            toast.success('Submission accepted successfully.', config)
+            toast.success('Submission accepted successfully.', toastConfig)
         } catch (err) {
-            toast.error(apiUtils.getErrorMessage(err), config)
+            toast.error(apiUtils.getErrorMessage(err), toastConfig)
         }
     }
 
@@ -101,10 +101,10 @@ const SubmissionPage: FC<Props> = ({ params }) => {
         setLoading(true)
 
         const toastId = toast.loading('Submitting prescription, please wait...', {
-            position
+            position: toastUtils.position
         })
 
-        const toastOptions = updateConfig
+        const toastOptions = toastUtils.updateConfig
 
         try {
             const formData = new FormData()

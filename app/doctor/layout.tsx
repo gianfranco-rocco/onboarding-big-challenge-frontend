@@ -1,9 +1,9 @@
 'use client'
 
 import { FolderIcon, HomeIcon } from "@heroicons/react/24/outline"
-import { MainLayout } from "../../components/layouts"
-import { INavigation } from "../../components/ui"
-import paths from "../../utils/paths"
+import { MainLayout } from "@components/layouts"
+import { INavigation } from "@components/ui"
+import { paths } from "@utils"
 
 const { doctor } = paths
 

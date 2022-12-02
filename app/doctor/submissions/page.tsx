@@ -1,15 +1,14 @@
 'use client'
 
 import React from 'react'
-import { Badge } from '../../../components/ui/badges'
-import { Link } from '../../../components/ui/buttons'
-import { IColumn, IPagination, IRow, Table } from '../../../components/ui/tables'
+import { Badge } from '@components/ui/badges'
+import { Link } from '@components/ui/buttons'
+import { IColumn, IPagination, IRow, Table } from '@components/ui/tables'
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
-import { badge } from '../../../utils'
-import paths from '../../../utils/paths'
-import { GetSubmissionsResponse, ISubmission } from '../../../interfaces'
-import { api } from '../../../api'
+import { badge, paths } from '@utils'
+import { GetSubmissionsResponse, ISubmission } from '@interfaces'
+import { api } from '@api'
 
 const { doctor } = paths
 
