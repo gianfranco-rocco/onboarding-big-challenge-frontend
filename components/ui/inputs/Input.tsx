@@ -25,6 +25,7 @@ interface Props {
   hidden?: boolean;
   match?: string;
   noMatchMessage?: string;
+  disabled?: boolean;
 }
 
 const classNames = (...classes: string[]): string => {
@@ -45,6 +46,7 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
     hidden,
     match,
     noMatchMessage = "Fields don't match",
+    disabled,
     ...rest
   } = props
 
@@ -122,10 +124,12 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
                     id={id}
                     type={type}
                     placeholder={placeholder}
+                    disabled={disabled}
                     className={
                       classNames(
                         (selectOptions?.length || leadingAddOn) ? 'border-l-0 rounded-r-md' : 'rounded-md',
                         errorMessage ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
+                        disabled ? 'disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500' : '',
                         'block w-full sm:text-sm border-gray-300'
                       )
                     }
