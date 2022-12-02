@@ -7,9 +7,10 @@ import { Form, BaseFormProps } from '.';
 type Props = BaseFormProps & {
     title?: string;
     subtitle?: string;
+    defaultValues?: any;
 }
 
-export const AuthForm: FC<Props> = ({ title, subtitle, children, classNames = '', onSubmit }) => (
+export const AuthForm: FC<Props> = ({ title, subtitle, children, classNames = '', onSubmit, defaultValues }) => (
     <>
         {
             title && 
@@ -28,7 +29,7 @@ export const AuthForm: FC<Props> = ({ title, subtitle, children, classNames = ''
 
         <div className={`mt-8 ${classNames}`}>
             <div className="bg-white py-8 px-4 sm:rounded-lg sm:px-10">
-                <Form onSubmit={onSubmit}>{children}</Form>
+                <Form onSubmit={onSubmit} defaultValues={defaultValues}>{children}</Form>
             </div>
         </div>
     </>

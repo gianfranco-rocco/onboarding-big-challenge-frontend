@@ -13,7 +13,7 @@ export type SelectOption = {
 }
 
 interface Props {
-    label: string;
+    label?: string;
     name: string;
     type?: HTMLInputTypeAttribute;
     placeholder?: string;
@@ -22,6 +22,9 @@ interface Props {
     form?: UseFormReturn<FieldValues, any>,
     validations?: RegisterOptions;
     apiErrors?: ApiError;
+    hidden?: boolean;
+    match?: string;
+    noMatchMessage?: string;
 }
 
 const classNames = (...classes: string[]): string => {
@@ -39,10 +42,13 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
         form,
         validations,
         apiErrors,
+        hidden,
+        match,
+        noMatchMessage = "Fields don't match",
         ...rest
     } = props;
 
-    const { register, formState } = form!
+    const { register, formState, getValues } = form!
 
     const [errorMessage, setErrorMessage] = useState('')
 
@@ -50,7 +56,15 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
         setErrorMessage(formErrors.getMessage(name, formState, apiErrors))
     }, [formState, apiErrors])
 
-    const id = label.split(' ').join('-').toLowerCase();
+    const id = label?.split(' ').join('-').toLowerCase() || undefined;
+
+    if (match && validations) {
+        validations.validate = {
+            equals: value => (value === getValues(match)) || noMatchMessage
+        }
+    }
+
+    const fieldRegistration = {...register(name, validations)}
 
     const [placeholder, setPlaceholder] = useState('')
     const [selected, setSelected] = useState(selectOptions?.length ? selectOptions[0].id : '')
@@ -62,59 +76,67 @@ export const Input: FC<Props & React.InputHTMLAttributes<HTMLInputElement>> = (p
     }, [selected])
 
     return (
-        <div className='w-full'>
-            <label htmlFor={id} className="block text-sm font-medium text-gray-700">
-                {label}
-            </label>
-            <div className={
-                classNames(
-                    (leadingAddOn || selectOptions?.length) ? 'flex' : '',
-                    'mt-1 rounded-md shadow-sm'
-                )
-            }>
-                {
-                    leadingAddOn &&
-                    <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 sm:text-sm">
-                        {leadingAddOn}
-                    </span>
-                }
-                {
-                    selectOptions?.length && 
-                    <div className="flex items-center">
-                        <select
-                            className={
-                                classNames(
-                                    errorMessage ? 'border-red-300 border-r-0 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'border-gray-300 border-r-0 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500',
-                                    'h-full rounded-l-md py-0 pl-3 pr-7 sm:text-sm'
-                                )
-                            }
-                            defaultValue={selected}
-                            {...register(`${name}-select`)}
-                            onChange={(e) => setSelected(e.target.value)}
-                        >
-                            {selectOptions.map((option: SelectOption) => <option key={option.id} value={option.id}>{option.name}</option>)}
-                        </select>
-                    </div>
-                }
-                <div className='relative w-full'>
-                    <input
-                        id={id}
-                        type={type}
-                        placeholder={placeholder}
-                        className={
+        <>
+            {
+                !hidden 
+                ? 
+                    <div className='w-full'>
+                        {label && <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+                            {label}
+                        </label>}
+                        <div className={
                             classNames(
-                                (selectOptions?.length || leadingAddOn) ? 'border-l-0 rounded-r-md' : 'rounded-md',
-                                errorMessage ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
-                                `block w-full sm:text-sm border-gray-300`
+                                (leadingAddOn || selectOptions?.length) ? 'flex' : '',
+                                label ? 'mt-1' : '',
+                                'rounded-md shadow-sm'
                             )
-                        }
-                        {...register(name, validations)}
-                        {...rest}
-                    />
-                    {errorMessage && <FieldErrorIcon />}
-                </div>
-            </div>
-            {errorMessage && <FieldError>{errorMessage}</FieldError>}
-        </div>
+                        }>
+                            {
+                                leadingAddOn &&
+                                <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 px-3 text-gray-500 sm:text-sm">
+                                    {leadingAddOn}
+                                </span>
+                            }
+                            {
+                                selectOptions?.length && 
+                                <div className="flex items-center">
+                                    <select
+                                        className={
+                                            classNames(
+                                                errorMessage ? 'border-red-300 border-r-0 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'border-gray-300 border-r-0 text-gray-500 focus:border-indigo-500 focus:ring-indigo-500',
+                                                'h-full rounded-l-md py-0 pl-3 pr-7 sm:text-sm'
+                                            )
+                                        }
+                                        defaultValue={selected}
+                                        {...register(`${name}-select`)}
+                                        onChange={(e) => setSelected(e.target.value)}
+                                    >
+                                        {selectOptions.map((option: SelectOption) => <option key={option.id} value={option.id}>{option.name}</option>)}
+                                    </select>
+                                </div>
+                            }
+                            <div className='relative w-full'>
+                                <input
+                                    id={id}
+                                    type={type}
+                                    placeholder={placeholder}
+                                    className={
+                                        classNames(
+                                            (selectOptions?.length || leadingAddOn) ? 'border-l-0 rounded-r-md' : 'rounded-md',
+                                            errorMessage ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500' : 'focus:border-indigo-500 focus:ring-indigo-500',
+                                            `block w-full sm:text-sm border-gray-300`
+                                        )
+                                    }
+                                    {...fieldRegistration}
+                                    {...rest}
+                                />
+                                {errorMessage && <FieldErrorIcon />}
+                            </div>
+                        </div>
+                        {errorMessage && <FieldError>{errorMessage}</FieldError>}
+                    </div>
+                : <input type='hidden' hidden {...fieldRegistration} />
+            }
+        </>
     )
 } 

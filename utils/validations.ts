@@ -1,3 +1,5 @@
+import { RegisterOptions } from "react-hook-form";
+
 export const isEmail = (email: string): boolean => {
     const match = String(email)
         .toLowerCase()
@@ -35,6 +37,12 @@ export const isInt = (value: any): boolean => {
         );
 
     return !!match
+}
+
+export const passwordValidations: RegisterOptions = {
+    required: 'This field is required.',
+    minLength: { value: 8, message: 'The password must have at least 8 characters.' },
+    maxLength: { value: 14, message: 'The password must not have more than 14 characters.' },
 }
 
 export const validateEmail = (email: string): string | undefined => !isEmail(email) ? "This doesn't seem to be a valid email address." : undefined

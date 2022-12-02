@@ -86,7 +86,7 @@ const RegisterPage = () => {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  placeholder="johndoe@email.com"
+                  placeholder="johndoe@example.com"
                   validations={{
                     required: 'This field is required.',
                     validate: validations.validateEmail
@@ -98,11 +98,7 @@ const RegisterPage = () => {
                   name="password"
                   type="password"
                   placeholder="********"
-                  validations={{
-                    required: 'This field is required.',
-                    minLength: { value: 8, message: 'The password must have at least 8 characters.' },
-                    maxLength: { value: 14, message: 'The password must not have more than 14 characters.' },
-                  }}
+                  validations={validations.passwordValidations}
               />
 
               <Input
@@ -110,11 +106,9 @@ const RegisterPage = () => {
                   name="passwordConfirmation"
                   type="password"
                   placeholder="********"
-                  validations={{
-                    required: 'This field is required.',
-                    minLength: { value: 8, message: 'The password must have at least 8 characters.' },
-                    maxLength: { value: 14, message: 'The password must not have more than 14 characters.' },
-                  }}
+                  match="password"
+                  noMatchMessage="Passwords don't match"
+                  validations={validations.passwordValidations}
               />
             </div>
 
