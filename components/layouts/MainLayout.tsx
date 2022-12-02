@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { INavigation, MainContent, Sidebar } from '@components/ui';
+import { INavigation, MainContent, Sidebar } from '@components/ui'
 
 interface Props {
     children: React.ReactNode;
@@ -8,9 +8,9 @@ interface Props {
 }
 
 export const MainLayout: FC<Props> = ({ children, navigation, profilePageHref }) => {
-    return (
-        <Sidebar navigation={navigation} profilePageHref={profilePageHref}>
-            <MainContent>{children}</MainContent>
-        </Sidebar>
-    )
+  return (
+    <Sidebar navigation={navigation} profilePageHref={profilePageHref}>
+      <MainContent>{children}</MainContent>
+    </Sidebar>
+  )
 }

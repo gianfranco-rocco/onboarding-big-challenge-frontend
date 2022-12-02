@@ -1,10 +1,10 @@
-import { FC, ReactNode, useEffect, useReducer } from 'react';
-import { api } from '@api';
-import { IPatientInfo, IUser } from '@interfaces';
-import { AuthContext, authReducer } from '@context/auth';
+import { FC, ReactNode, useEffect, useReducer } from 'react'
+import { api } from '@api'
+import { IPatientInfo, IUser } from '@interfaces'
+import { AuthContext, authReducer } from '@context/auth'
 import Cookies from 'js-cookie'
 import { LoginRegisterResponse, Response } from '@context/auth/AuthContext'
-import { RegisterFormValues } from '@app/auth/register/page';
+import { RegisterFormValues } from '@app/auth/register/page'
 import { api as apiUtils } from '@utils'
 
 export interface AuthState {
@@ -42,7 +42,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
       const {
         message,
         token,
-        user,
+        user
       } = data
 
       dispatch({ type: 'Login', payload: user })
@@ -69,7 +69,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
       const {
         message,
         token,
-        user,
+        user
       } = resData
 
       dispatch({ type: 'Register', payload: user })
@@ -116,7 +116,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
       dispatch({ type: 'Update patient info', payload: data })
 
       return {
-        success: true,
+        success: true
       }
     } catch (err) {
       return {
@@ -132,7 +132,7 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
     const authenticateUserByToken = async () => {
       try {
         const { data } = await api.get<IUser>('/user')
-  
+
         dispatch({ type: 'Login', payload: data })
       } catch (err) {}
     }
@@ -141,16 +141,16 @@ export const AuthProvider: FC<ProviderProps> = ({ children }) => {
       authenticateUserByToken()
     }
   }, [])
-  
-  
+
   return (
     <AuthContext.Provider value={{
       ...state,
       login,
       register,
       logout,
-      updatePatientInfo,
-    }}>
+      updatePatientInfo
+    }}
+    >
       {children}
     </AuthContext.Provider>
   )

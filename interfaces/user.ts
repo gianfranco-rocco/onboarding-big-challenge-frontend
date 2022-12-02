@@ -1,4 +1,4 @@
-import { IRole } from "@interfaces";
+import { IRole } from '@interfaces'
 
 export interface IPatientInfo {
     phone: string;

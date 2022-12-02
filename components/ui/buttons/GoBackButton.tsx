@@ -7,9 +7,9 @@ interface Props {
 }
 
 export const GoBackButton: FC<Props> = ({ href }) => {
-    return (
-        <Link href={href}>
-            <ArrowLeftIcon className='h-5 w-5 mb-4' />
-        </Link>
-    )
+  return (
+    <Link href={href}>
+      <ArrowLeftIcon className='h-5 w-5 mb-4' />
+    </Link>
+  )
 }

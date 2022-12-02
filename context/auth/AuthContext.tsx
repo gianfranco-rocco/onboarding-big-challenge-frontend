@@ -1,6 +1,6 @@
-import { createContext } from 'react';
-import { RegisterFormValues } from '@app/auth/register/page';
-import { IUser, IPatientInfo } from '@interfaces';
+import { createContext } from 'react'
+import { RegisterFormValues } from '@app/auth/register/page'
+import { IUser, IPatientInfo } from '@interfaces'
 
 export interface Response {
   success: boolean;
@@ -17,4 +17,4 @@ interface ContextProps {
   updatePatientInfo: (data: IPatientInfo) => Promise<Response>;
 }
 
-export const AuthContext = createContext({} as ContextProps);
+export const AuthContext = createContext({} as ContextProps)

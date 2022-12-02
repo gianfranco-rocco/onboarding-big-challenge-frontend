@@ -7,7 +7,7 @@ import { Form } from '@components/ui/forms'
 import { Input, Textarea } from '@components/ui/inputs'
 import { PageTitle } from '@components/ui/pages'
 import { validations, paths, toast as toastUtils } from '@utils'
-import axios from 'axios';
+import axios from 'axios'
 import { toast } from 'react-toastify'
 import { AuthContext } from '@context/auth'
 import { IPatientInfo } from '@interfaces'
@@ -29,7 +29,7 @@ const PatientProfilePage = () => {
   const onSubmit = async (formData: FieldValues) => {
     try {
       await updatePatientInfo(formData as IPatientInfo)
-  
+
       toast.success('Information updated successfully.', toastConfig)
 
       setErrors({})
@@ -51,39 +51,39 @@ const PatientProfilePage = () => {
         subtitle='You need to complete your profile before adding a submission'
       />
 
-      <Form 
-        classNames='md:w-1/2 w-full flex flex-col gap-6' 
+      <Form
+        classNames='md:w-1/2 w-full flex flex-col gap-6'
         onSubmit={onSubmit}
         apiErrors={errors}
         defaultValues={{
           phone: user?.info?.phone,
           height: user?.info?.height,
           weight: user?.info?.weight,
-          info: user?.info?.info,
+          info: user?.info?.info
         }}
       >
-        <Input 
+        <Input
           label='Phone number'
           name='phone'
           placeholder='(406) 555-0121'
           validations={{
-            required: 'This field is required.',
+            required: 'This field is required.'
             // validate: validations.validatePhoneNumber
           }}
         />
 
         <div className='flex gap-2'>
-          <Input 
+          <Input
             label='Weight'
             name='weight'
             placeholder='80'
             validations={{
               required: 'This field is required.',
-              validate: validations.validateInt,
+              validate: validations.validateInt
             }}
           />
 
-          <Input 
+          <Input
             label='Height'
             name='height'
             placeholder='170'
@@ -94,7 +94,7 @@ const PatientProfilePage = () => {
           />
         </div>
 
-        <Textarea 
+        <Textarea
           label='Other info'
           name='info'
           rows={6}

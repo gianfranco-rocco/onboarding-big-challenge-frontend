@@ -1,5 +1,5 @@
-import { IUser, IPatientInfo } from '@interfaces';
-import { AuthState } from '@context/auth';
+import { IUser, IPatientInfo } from '@interfaces'
+import { AuthState } from '@context/auth'
 
 type AuthActionType =
     | { type: 'Login', payload: IUser }
@@ -8,27 +8,27 @@ type AuthActionType =
     | { type: 'Update patient info', payload: IPatientInfo }
 
 export const authReducer = (state: AuthState, action: AuthActionType): AuthState => {
-    switch (action.type) {
-       case 'Login':
-       case 'Register':
-           return {
-               ...state,
-               user: action.payload
-           }
-        case 'Logout':
-            return {
-                ...state,
-                user: undefined
-            }
-        case 'Update patient info':
-            return {
-                ...state,
-                user: {
-                    ...state.user!,
-                    info: action.payload
-                }
-            }
-       default:
-           return state;
-    }
+  switch (action.type) {
+    case 'Login':
+    case 'Register':
+      return {
+        ...state,
+        user: action.payload
+      }
+    case 'Logout':
+      return {
+        ...state,
+        user: undefined
+      }
+    case 'Update patient info':
+      return {
+        ...state,
+        user: {
+          ...state.user!,
+          info: action.payload
+        }
+      }
+    default:
+      return state
+  }
 }

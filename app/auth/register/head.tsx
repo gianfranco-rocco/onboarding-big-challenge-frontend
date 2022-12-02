@@ -3,7 +3,7 @@ import React from 'react'
 const Head = () => {
   return (
     <>
-        <title>Register | Big Challenge</title>
+      <title>Register | Big Challenge</title>
     </>
   )
 }

@@ -1,10 +1,9 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Badge } from '@components/ui/badges'
 import { Link } from '@components/ui/buttons'
 import { IColumn, IPagination, IRow, Table } from '@components/ui/tables'
-import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation'
 import { badge, paths } from '@utils'
 import { ISubmission } from '@interfaces'
@@ -14,15 +13,15 @@ const { doctor } = paths
 
 const columns: IColumn[] = [
   { field: 'submissionTitle', name: 'submission title', className: 'font-bold' },
-  { field: 'patientName', name: 'patient name', className: 'font-bold' }, 
-  { field: 'createdAt', name: 'created at' }, 
-  { 
-    field: 'status', 
+  { field: 'patientName', name: 'patient name', className: 'font-bold' },
+  { field: 'createdAt', name: 'created at' },
+  {
+    field: 'status',
     name: 'status',
     renderCell: (row: IRow) => <Badge type={badge.typeBasedOnStatus(row.status)} className='capitalize'>{row.status.replace('_', ' ')}</Badge>
   },
-  { 
-    field: 'view', 
+  {
+    field: 'view',
     renderCell: (row: IRow) => <Link href={doctor.submission.replace(':id', row.id)}>View more</Link>
   }
 ]
@@ -49,14 +48,14 @@ const TaskHistoryPage = () => {
       })))
 
       setPagination({
-        links, 
+        links,
         meta
       })
     }
 
     getSubmissions()
   }, [page])
-  
+
   const handlePagination = (page: number) => {
     router.push(`${doctor.taskHistory}?page=${page}`)
   }
@@ -66,11 +65,11 @@ const TaskHistoryPage = () => {
   }
 
   return (
-    <Table 
-      columns={columns} 
-      rows={rows} 
-      pagination={pagination} 
-      handlePagination={handlePagination} 
+    <Table
+      columns={columns}
+      rows={rows}
+      pagination={pagination}
+      handlePagination={handlePagination}
     />
   )
 }

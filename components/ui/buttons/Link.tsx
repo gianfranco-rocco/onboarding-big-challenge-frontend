@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import NextLink from "next/link"
+import NextLink from 'next/link'
 
 interface Props {
     href: string;
@@ -9,9 +9,9 @@ interface Props {
 }
 
 export const Link: FC<Props> = ({ href, target = '_self', download, children }) => {
-    return (
-        <NextLink href={href} target={target} download={download} className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-            {children}
-        </NextLink>
-    )
+  return (
+    <NextLink href={href} target={target} download={download} className='text-sm font-medium text-indigo-600 hover:text-indigo-500'>
+      {children}
+    </NextLink>
+  )
 }

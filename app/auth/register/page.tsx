@@ -1,19 +1,19 @@
 'use client'
 
-import { ButtonPrimary, Link } from "@components/ui/buttons"
-import { AuthForm } from "@components/ui/forms"
-import { Input, IRadioOption, RadioGroup } from "@components/ui/inputs"
-import { paths, validations, toast as toastUtils } from "@utils";
-import { FieldValues } from 'react-hook-form';
-import { UserType } from "@interfaces";
-import { useContext, useState } from 'react';
-import { AuthContext } from "@context/auth";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { ButtonPrimary, Link } from '@components/ui/buttons'
+import { AuthForm } from '@components/ui/forms'
+import { Input, IRadioOption, RadioGroup } from '@components/ui/inputs'
+import { paths, validations, toast as toastUtils } from '@utils'
+import { FieldValues } from 'react-hook-form'
+import { UserType } from '@interfaces'
+import { useContext, useState } from 'react'
+import { AuthContext } from '@context/auth'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-toastify'
 
 const userTypes: IRadioOption[] = [
   { id: 'patient', name: 'Patient' },
-  { id: 'doctor', name: 'Doctor' },
+  { id: 'doctor', name: 'Doctor' }
 ]
 
 export type RegisterFormValues = {
@@ -51,7 +51,7 @@ const RegisterPage = () => {
 
       setTimeout(() => {
         router.replace(paths[user!.roles[0].name].home)
-      }, 3000);
+      }, 3000)
     } else {
       setLoading(false)
     }
@@ -60,76 +60,76 @@ const RegisterPage = () => {
   }
 
   return (
-        <AuthForm
-          title="Welcome to the doctor's app" 
-          subtitle="Sign up to access unique features"
-          classNames="lg:mx-auto lg:w-1/2"
-          onSubmit={onSubmit}
-        >
-            <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
-              <Input
-                  label="Name"
-                  name="name"
-                  type="text"
-                  placeholder="John Doe"
-                  autoFocus
-                  validations={{
-                    required: 'This field is required.',
-                    validate: validations.validateAlpha
-                  }}
-              />
+    <AuthForm
+      title="Welcome to the doctor's app"
+      subtitle='Sign up to access unique features'
+      classNames='lg:mx-auto lg:w-1/2'
+      onSubmit={onSubmit}
+    >
+      <div className='grid lg:grid-cols-2 grid-cols-1 gap-6'>
+        <Input
+          label='Name'
+          name='name'
+          type='text'
+          placeholder='John Doe'
+          autoFocus
+          validations={{
+            required: 'This field is required.',
+            validate: validations.validateAlpha
+          }}
+        />
 
-              <Input
-                  label="Email address"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="johndoe@example.com"
-                  validations={{
-                    required: 'This field is required.',
-                    validate: validations.validateEmail
-                  }}
-              /> 
-              
-              <Input
-                  label="Password"
-                  name="password"
-                  type="password"
-                  placeholder="********"
-                  validations={validations.passwordValidations}
-              />
+        <Input
+          label='Email address'
+          name='email'
+          type='email'
+          autoComplete='email'
+          placeholder='johndoe@example.com'
+          validations={{
+            required: 'This field is required.',
+            validate: validations.validateEmail
+          }}
+        />
 
-              <Input
-                  label="Repeat password"
-                  name="passwordConfirmation"
-                  type="password"
-                  placeholder="********"
-                  match="password"
-                  noMatchMessage="Passwords don't match"
-                  validations={validations.passwordValidations}
-              />
-            </div>
+        <Input
+          label='Password'
+          name='password'
+          type='password'
+          placeholder='********'
+          validations={validations.passwordValidations}
+        />
 
-            <RadioGroup 
-              options={userTypes} 
-              label="User type" 
-              name='type'
-              validations={{
-                required: 'One option must be selected.'
-              }}
-            />
+        <Input
+          label='Repeat password'
+          name='passwordConfirmation'
+          type='password'
+          placeholder='********'
+          match='password'
+          noMatchMessage="Passwords don't match"
+          validations={validations.passwordValidations}
+        />
+      </div>
 
-            <ButtonPrimary type="submit" disabled={loading}>
-                Register
-            </ButtonPrimary>
+      <RadioGroup
+        options={userTypes}
+        label='User type'
+        name='type'
+        validations={{
+          required: 'One option must be selected.'
+        }}
+      />
 
-            <div className="flex justify-center">
-                <Link href={paths.auth.login}>
-                    Already have an account?
-                </Link>
-            </div>
-        </AuthForm>
+      <ButtonPrimary type='submit' disabled={loading}>
+        Register
+      </ButtonPrimary>
+
+      <div className='flex justify-center'>
+        <Link href={paths.auth.login}>
+          Already have an account?
+        </Link>
+      </div>
+    </AuthForm>
   )
 }
-  
+
 export default RegisterPage

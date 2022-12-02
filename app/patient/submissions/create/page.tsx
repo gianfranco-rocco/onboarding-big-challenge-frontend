@@ -5,7 +5,7 @@ import { Form } from '@components/ui/forms'
 import { Input, Textarea } from '@components/ui/inputs'
 import { PageTitle } from '@components/ui/pages'
 import { paths, api as apiUtils, toast as toastUtils } from '@utils'
-import { FieldValues } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form'
 import { api } from '@api'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
@@ -47,12 +47,12 @@ const CreateSubmissionPage = () => {
     <>
       <GoBackButton href={paths.patient.home} />
 
-      <PageTitle title='New submission'/>
+      <PageTitle title='New submission' />
 
       <Form classNames='lg:w-1/2' onSubmit={onSubmit}>
-        <Input 
-          label='Title' 
-          type='text' 
+        <Input
+          label='Title'
+          type='text'
           name='title'
           placeholder='Hepatic infarction'
           autoFocus
@@ -61,18 +61,18 @@ const CreateSubmissionPage = () => {
           }}
         />
 
-        <Textarea 
-          label='Symptoms' 
+        <Textarea
+          label='Symptoms'
           name='symptoms'
           placeholder='Stomach and abdominal pain, cramps and fever'
           rows={6}
           validations={{
-            required: 'This field is required.',
+            required: 'This field is required.'
           }}
         />
 
-        <ButtonPrimary 
-          className='w-max' 
+        <ButtonPrimary
+          className='w-max'
           type='submit'
           disabled={loading}
         >

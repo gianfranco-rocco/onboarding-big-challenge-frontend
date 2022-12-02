@@ -1,173 +1,173 @@
 'use client'
 
 import React, { ChangeEvent, FC, useContext, useEffect, useState } from 'react'
-import { ISubmission } from '@interfaces';
-import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '@components/ui/submission';
-import { ToastAlert } from '@components/ui/alerts';
-import { GoBackButton, ButtonPrimary, FileUploadButton, DownloadButton } from '@components/ui/buttons';
-import { PageTitle } from '@components/ui/pages';
-import { useDownloadPrescription, useSubmission } from '@hooks';
-import { api } from '@api';
-import { toast } from 'react-toastify';
-import { toast as toastUtils, api as apiUtils, paths } from '@utils';
-import { SubmissionStatus } from '@types';
-import { useRouter } from 'next/navigation';
-import { AuthContext } from '@context/auth';
-import axios from 'axios';
+import { ISubmission } from '@interfaces'
+import { SubmissionInfo, SubmissionSubtitle, SubmissionTitle } from '@components/ui/submission'
+import { ToastAlert } from '@components/ui/alerts'
+import { GoBackButton, ButtonPrimary, FileUploadButton, DownloadButton } from '@components/ui/buttons'
+import { PageTitle } from '@components/ui/pages'
+import { useDownloadPrescription, useSubmission } from '@hooks'
+import { api } from '@api'
+import { toast } from 'react-toastify'
+import { toast as toastUtils, api as apiUtils, paths } from '@utils'
+import { SubmissionStatus } from '@types'
+import { useRouter } from 'next/navigation'
+import { AuthContext } from '@context/auth'
+import axios from 'axios'
 interface Props {
     params: { id: string }
 }
 
 const SubmissionPage: FC<Props> = ({ params }) => {
-    const router = useRouter()
+  const router = useRouter()
 
-    const { user } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
 
-    const [submission, setSubmission] = useState<ISubmission>()
-    const [showAlert, setShowAlert] = useState(false)
-    const [status, setStatus] = useState<SubmissionStatus>('pending')
-    const [prescription, setPrescription] = useState<File>()
-    const [loading, setLoading] = useState(false)
+  const [submission, setSubmission] = useState<ISubmission>()
+  const [showAlert, setShowAlert] = useState(false)
+  const [status, setStatus] = useState<SubmissionStatus>('pending')
+  const [prescription, setPrescription] = useState<File>()
+  const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
-        const getSubmission = async () => {
-            try {
-                const submission = await useSubmission(Number(params.id))
+  useEffect(() => {
+    const getSubmission = async () => {
+      try {
+        const submission = await useSubmission(Number(params.id))
 
-                const isPending = submission.status === 'pending'
+        const isPending = submission.status === 'pending'
 
-                if (!isPending && submission.doctor!.id !== user!.id) {
-                    return router.replace(paths.doctor.home)
-                }
+        if (!isPending && submission.doctor!.id !== user!.id) {
+          return router.replace(paths.doctor.home)
+        }
 
-                setSubmission(submission)
-    
-                setStatus(submission.status)
-    
-                setShowAlert(isPending)
-            } catch (err) {
-                if (axios.isAxiosError(err)) {
-                    if (err.response?.status === 404) {
-                        return router.replace(paths.doctor.home)
-                    }
-                }
-            }
+        setSubmission(submission)
+
+        setStatus(submission.status)
+
+        setShowAlert(isPending)
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          if (err.response?.status === 404) {
+            return router.replace(paths.doctor.home)
           }
-      
-          getSubmission()
-    }, [status])
-    
-    if (!submission) {
-        return <></>
-    }
-
-    const {
-        title,
-        patient,
-        created_at
-    } = submission
-
-    const { doctor } = paths
-
-    const isPending = status === 'pending'
-    const isInProgress = status === 'in_progress'
-    const isDone = status === 'done'
-    
-    const toastConfig = toastUtils.config
-
-    const handlePrescriptionUpload = (data: ChangeEvent<HTMLInputElement>) => {
-        const files = data.target.files
-
-        if (!files?.length) return null
-
-        if (files.length > 1) toast.error('Only 1 (one) prescription can be submitted.', toastConfig)
-
-        setPrescription(files[0])
-    }
-
-    const handleAcceptSubmission = async () => {
-        try {
-            await api.post(`/submissions/${submission.id}/assignments`)
-
-            setStatus('in_progress')
-
-            toast.success('Submission accepted successfully.', toastConfig)
-        } catch (err) {
-            toast.error(apiUtils.getErrorMessage(err), toastConfig)
         }
+      }
     }
 
-    const handleFinishSubmission = async () => {
-        setLoading(true)
+    getSubmission()
+  }, [status])
 
-        const toastId = toast.loading('Submitting prescription, please wait...', {
-            position: toastUtils.position
-        })
+  if (!submission) {
+    return <></>
+  }
 
-        const toastOptions = toastUtils.updateConfig
+  const {
+    title,
+    patient,
+    created_at
+  } = submission
 
-        try {
-            const formData = new FormData()
-            formData.append('uploadedFile', prescription!)
+  const { doctor } = paths
 
-            await api.post(`/upload/${submission.id}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
+  const isPending = status === 'pending'
+  const isInProgress = status === 'in_progress'
+  const isDone = status === 'done'
 
-            await api.post(`/finish/${submission.id}`)
+  const toastConfig = toastUtils.config
 
-            setStatus('done')
+  const handlePrescriptionUpload = (data: ChangeEvent<HTMLInputElement>) => {
+    const files = data.target.files
 
-            toastOptions.type = 'success'
-            toastOptions.render = 'Prescription submitted successfully.'
-        } catch (err) {
-            toastOptions.type = 'error'
-            toastOptions.render = apiUtils.getErrorMessage(err)
+    if (!files?.length) return null
+
+    if (files.length > 1) toast.error('Only 1 (one) prescription can be submitted.', toastConfig)
+
+    setPrescription(files[0])
+  }
+
+  const handleAcceptSubmission = async () => {
+    try {
+      await api.post(`/submissions/${submission.id}/assignments`)
+
+      setStatus('in_progress')
+
+      toast.success('Submission accepted successfully.', toastConfig)
+    } catch (err) {
+      toast.error(apiUtils.getErrorMessage(err), toastConfig)
+    }
+  }
+
+  const handleFinishSubmission = async () => {
+    setLoading(true)
+
+    const toastId = toast.loading('Submitting prescription, please wait...', {
+      position: toastUtils.position
+    })
+
+    const toastOptions = toastUtils.updateConfig
+
+    try {
+      const formData = new FormData()
+      formData.append('uploadedFile', prescription!)
+
+      await api.post(`/upload/${submission.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
         }
+      })
 
-        toast.update(toastId, toastOptions)
+      await api.post(`/finish/${submission.id}`)
 
-        setLoading(false)
+      setStatus('done')
+
+      toastOptions.type = 'success'
+      toastOptions.render = 'Prescription submitted successfully.'
+    } catch (err) {
+      toastOptions.type = 'error'
+      toastOptions.render = apiUtils.getErrorMessage(err)
     }
 
-    const handlePrescriptionDownload = () => {
-        useDownloadPrescription(submission.id)
-    }
+    toast.update(toastId, toastOptions)
 
-    return (
-        <>
-            <GoBackButton href={submission.status === 'pending' ? doctor.home : doctor.taskHistory} />
+    setLoading(false)
+  }
 
-            <PageTitle
-                title={<SubmissionTitle status={status}>{title}</SubmissionTitle>}
-                subtitle={<SubmissionSubtitle user={patient.name} createdAt={created_at} />}
-                button={
-                    !isDone && 
-                    <ButtonPrimary
+  const handlePrescriptionDownload = () => {
+    useDownloadPrescription(submission.id)
+  }
+
+  return (
+    <>
+      <GoBackButton href={submission.status === 'pending' ? doctor.home : doctor.taskHistory} />
+
+      <PageTitle
+        title={<SubmissionTitle status={status}>{title}</SubmissionTitle>}
+        subtitle={<SubmissionSubtitle user={patient.name} createdAt={created_at} />}
+        button={
+                    !isDone &&
+                      <ButtonPrimary
                         onClick={isPending ? handleAcceptSubmission : handleFinishSubmission}
                         disabled={(isInProgress && !prescription) || loading}
-                    >
+                      >
                         {isPending ? 'Accept submission' : 'Finish submission'}
-                    </ButtonPrimary>
+                      </ButtonPrimary>
                 }
-            />
+      />
 
-            <SubmissionInfo submission={submission} />
+      <SubmissionInfo submission={submission} />
 
-            <div className='text-sm mt-6'>
-                <label className='text-gray-500'>Prescription</label>
-                {
-                    isDone 
-                    ? <DownloadButton fileName={submission.prescription!} handleDownload={handlePrescriptionDownload} /> 
-                    : <FileUploadButton fileName={prescription?.name} disabled={isPending} handleFileUpload={handlePrescriptionUpload} />
+      <div className='text-sm mt-6'>
+        <label className='text-gray-500'>Prescription</label>
+        {
+                    isDone
+                      ? <DownloadButton fileName={submission.prescription!} handleDownload={handlePrescriptionDownload} />
+                      : <FileUploadButton fileName={prescription?.name} disabled={isPending} handleFileUpload={handlePrescriptionUpload} />
                 }
-            </div>
+      </div>
 
-            {isPending && <ToastAlert show={showAlert} setShow={setShowAlert} type='primary' classNames='mt-6'>Accept this submission to add a prescription</ToastAlert>}
-        </>
-    )
+      {isPending && <ToastAlert show={showAlert} setShow={setShowAlert} type='primary' classNames='mt-6'>Accept this submission to add a prescription</ToastAlert>}
+    </>
+  )
 }
 
 export default SubmissionPage
