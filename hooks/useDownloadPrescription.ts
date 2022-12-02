@@ -1,14 +1,13 @@
 import { toast } from "react-toastify";
-import { api } from "../api";
-import { api as apiUtils } from "../utils";
-import { position, updateConfig } from "../utils/toast";
+import { api } from "@api";
+import { api as apiUtils, toast as toastUtils } from "@utils";
 
 export const useDownloadPrescription = (submissionId: number) => {
     const toastId = toast.loading('Prescription download started, please wait...', {
-        position
+        position: toastUtils.position
     })
 
-    const toastOptions = updateConfig
+    const toastOptions = toastUtils.updateConfig
 
     api.get(`/download/${submissionId}`)
     .then(res => {

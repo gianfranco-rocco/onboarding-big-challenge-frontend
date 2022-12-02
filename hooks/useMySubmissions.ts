@@ -1,6 +1,6 @@
-import { api } from "../api";
-import { IPaginationLinks, IPaginationMeta } from "../components/ui/tables";
-import { ISubmission } from "../interfaces";
+import { api } from "@api";
+import { IPaginationLinks, IPaginationMeta } from "@components/ui/tables";
+import { ISubmission } from "@interfaces";
 
 interface Response {
     data: ISubmission[];
