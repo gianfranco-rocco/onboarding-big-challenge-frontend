@@ -161,7 +161,7 @@ const SubmissionPage: FC<Props> = ({ params }) => {
         {
                     isDone
                       ? <DownloadButton fileName={submission.prescription!} handleDownload={handlePrescriptionDownload} />
-                      : <FileUploadButton fileName={prescription?.name} disabled={isPending} handleFileUpload={handlePrescriptionUpload} />
+                      : <FileUploadButton fileName={prescription?.name} disabled={isPending || loading} handleFileUpload={handlePrescriptionUpload} />
                 }
       </div>
 
