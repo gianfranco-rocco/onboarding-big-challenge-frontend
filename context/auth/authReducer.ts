@@ -1,6 +1,5 @@
-import { IUser } from '../../interfaces';
-import { AuthState } from './';
-import { IPatientInfo } from '../../interfaces/user';
+import { IUser, IPatientInfo } from '@interfaces';
+import { AuthState } from '@context/auth';
 
 type AuthActionType =
     | { type: 'Login', payload: IUser }

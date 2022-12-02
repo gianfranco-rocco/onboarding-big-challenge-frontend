@@ -26,14 +26,16 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["components/*"],
+      "@clientSidePackages": ["client_side_packages"],
       "@context/*": ["context/*"],
       "@hooks": ["hooks"],
       "@interfaces": ["interfaces"],
-      "@providers/*": ["providers/"],
+      "@providers": ["providers"],
       "@styles/*": ["styles/*"],
+      "@app/*": ["app/*"],
       "@types": ["types"],
       "@utils": ["utils"],
-      "@api": ["api"]
+      "@api": ["api"],
     }
   },
   "include": [

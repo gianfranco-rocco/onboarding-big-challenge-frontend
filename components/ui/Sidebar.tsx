@@ -7,10 +7,9 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { AuthContext } from '../../context/auth';
+import { AuthContext } from '@context/auth';
 import { toast } from 'react-toastify';
-import { config } from '../../utils/toast';
-import paths from '../../utils/paths';
+import { toast as toastUtils, paths } from '@utils';
 
 export interface INavigation {
   name: string;
@@ -59,7 +58,7 @@ export const Sidebar: FC<Props> = ({ children, navigation, profilePageHref }) =>
     if (success) {
       router.replace(paths.auth.login)
     } else {
-      toast.error(message, config)
+      toast.error(message, toastUtils.config)
     }
   }
 

@@ -2,9 +2,9 @@
 
 import React, { FC, useState, useEffect, HTMLInputTypeAttribute } from 'react'
 import { FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
-import { formErrors } from '../../../utils';
-import { FieldError, FieldErrorIcon } from '../error';
-import { ApiError } from '../forms';
+import { formErrors } from '@utils';
+import { FieldError, FieldErrorIcon } from '@components/ui/error';
+import { ApiError } from '@components/ui/forms';
 
 export type SelectOption = {
     id: number | string,

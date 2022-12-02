@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import { RegisterFormValues } from '../../app/auth/register/page';
-import { IUser, IPatientInfo } from '../../interfaces';
+import { RegisterFormValues } from '@app/auth/register/page';
+import { IUser, IPatientInfo } from '@interfaces';
 
 export interface Response {
   success: boolean;

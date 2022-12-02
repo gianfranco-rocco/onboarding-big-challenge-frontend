@@ -1,7 +1,7 @@
 'use client'
 
 import React, { FC, useRef } from 'react'
-import { ButtonSecondary } from './ButtonSecondary'
+import { ButtonSecondary } from '@components/ui/buttons'
 
 interface Props {
     fileName?: string;

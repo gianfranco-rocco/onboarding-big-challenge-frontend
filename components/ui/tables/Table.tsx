@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { IHandlePagination, IPagination, Pagination } from "./Pagination";
+import { IHandlePagination, IPagination, Pagination } from "@components/ui/tables";
 
 export interface IRow {
     [key: string]: any;

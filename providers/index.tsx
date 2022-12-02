@@ -3,7 +3,7 @@
 import axios from 'axios';
 import { FC } from 'react';
 import { SWRConfig } from 'swr';
-import { AuthProvider } from '../context/auth';
+import { AuthProvider } from '@context/auth';
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data)
 

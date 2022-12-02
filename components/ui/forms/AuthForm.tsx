@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import React, { FC } from 'react'
-import { Form, BaseFormProps } from '.';
+import { Form, BaseFormProps } from '@components/ui/forms';
 
 type Props = BaseFormProps & {
     title?: string;

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
-import { ISubmission } from '../../../interfaces'
-import { Information } from '../sections'
+import { ISubmission } from '@interfaces'
+import { Information } from '@components/ui/sections'
 
 interface Props {
     submission: ISubmission;

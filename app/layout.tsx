@@ -1,7 +1,7 @@
 import React from 'react'
-import { ToastContainer } from '../client_side_packages'
-import { Providers } from '../providers'
-import '../styles/globals.css'
+import { ToastContainer } from '@clientSidePackages'
+import { Providers } from '@providers'
+import '@styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function RootLayout({

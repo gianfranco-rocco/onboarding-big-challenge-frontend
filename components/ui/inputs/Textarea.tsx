@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
 import { FieldValues, RegisterOptions, UseFormReturn } from 'react-hook-form';
-import { formErrors } from '../../../utils';
-import { FieldError, FieldErrorIcon } from '../error';
-import { ApiError } from '../forms';
+import { formErrors } from '@utils';
+import { FieldError, FieldErrorIcon } from '@components/ui/error';
+import { ApiError } from '@components/ui/forms';
 
 const classNames = (...classes: string[]): string => {
     return classes.filter(Boolean).join(' ')

@@ -1,6 +1,6 @@
-import { reactHookForm } from "."
+import { reactHookForm } from "@utils"
 import { FormState, FieldValues } from 'react-hook-form';
-import { ApiError } from "../components/ui/forms";
+import { ApiError } from "@components/ui/forms";
 
 export const getMessage = (
     name: string, 

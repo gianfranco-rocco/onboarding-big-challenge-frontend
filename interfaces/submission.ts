@@ -1,6 +1,6 @@
-import { IPaginationLinks, IPaginationMeta } from "../components/ui/tables";
-import { SubmissionStatus } from "../types";
-import { IUser } from "./user";
+import { IPaginationLinks, IPaginationMeta } from "@components/ui/tables";
+import { SubmissionStatus } from "@types";
+import { IUser } from "@interfaces";
 
 export interface ISubmission {
     id: number;

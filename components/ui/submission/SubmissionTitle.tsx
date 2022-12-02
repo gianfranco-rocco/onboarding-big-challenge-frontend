@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
-import { SubmissionStatus } from '../../../types';
-import { badge } from '../../../utils';
-import { Badge } from '../badges';
+import { SubmissionStatus } from '@types';
+import { badge } from '@utils';
+import { Badge } from '@components/ui/badges';
 
 interface Props {
     status: SubmissionStatus;

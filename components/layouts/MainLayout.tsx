@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
-import { INavigation, MainContent } from '../ui';
-import { Sidebar } from '../ui/Sidebar';
+import { INavigation, MainContent, Sidebar } from '@components/ui';
 
 interface Props {
     children: React.ReactNode;

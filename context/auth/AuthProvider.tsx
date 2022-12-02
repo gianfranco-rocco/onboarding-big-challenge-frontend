@@ -1,11 +1,11 @@
 import { FC, ReactNode, useEffect, useReducer } from 'react';
-import { api } from '../../api';
-import { IPatientInfo, IUser } from '../../interfaces';
-import { AuthContext, authReducer } from './';
+import { api } from '@api';
+import { IPatientInfo, IUser } from '@interfaces';
+import { AuthContext, authReducer } from '@context/auth';
 import Cookies from 'js-cookie'
-import { LoginRegisterResponse, Response } from './AuthContext'
-import { RegisterFormValues } from '../../app/auth/register/page';
-import { api as apiUtils } from '../../utils'
+import { LoginRegisterResponse, Response } from '@context/auth/AuthContext'
+import { RegisterFormValues } from '@app/auth/register/page';
+import { api as apiUtils } from '@utils'
 
 export interface AuthState {
   user?: IUser;
