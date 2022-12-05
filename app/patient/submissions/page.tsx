@@ -65,10 +65,6 @@ const SubmissionsPage = () => {
     setStatus(selected.id as SubmissionStatus)
   }
 
-  const handlePagination = (page: number) => {
-    setPage(page)
-  }
-
   if (!pagination) {
     return <></>
   }
@@ -85,7 +81,7 @@ const SubmissionsPage = () => {
         columns={columns}
         rows={rows}
         pagination={pagination}
-        handlePagination={handlePagination}
+        setPage={setPage}
       />
     </>
   )

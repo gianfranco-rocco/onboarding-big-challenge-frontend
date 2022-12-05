@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { Badge } from '@components/ui/badges'
 import { Link } from '@components/ui/buttons'
 import { IColumn, IPagination, IRow, Table } from '@components/ui/tables'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { badge, paths } from '@utils'
 import { ISubmission } from '@interfaces'
 import { useMySubmissions } from '@hooks'
@@ -27,13 +26,9 @@ const columns: IColumn[] = [
 ]
 
 const TaskHistoryPage = () => {
-  const { get: params } = useSearchParams()
-  const router = useRouter()
-
-  const page = Number(params('page') || 1)
-
   const [rows, setRows] = useState<IRow[]>([])
   const [pagination, setPagination] = useState<IPagination>()
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     const getSubmissions = async () => {
@@ -56,10 +51,6 @@ const TaskHistoryPage = () => {
     getSubmissions()
   }, [page])
 
-  const handlePagination = (page: number) => {
-    router.push(`${doctor.taskHistory}?page=${page}`)
-  }
-
   if (!pagination) {
     return <></>
   }
@@ -69,7 +60,7 @@ const TaskHistoryPage = () => {
       columns={columns}
       rows={rows}
       pagination={pagination}
-      handlePagination={handlePagination}
+      setPage={setPage}
     />
   )
 }

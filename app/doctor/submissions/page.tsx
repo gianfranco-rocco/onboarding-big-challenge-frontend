@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { Badge } from '@components/ui/badges'
 import { Link } from '@components/ui/buttons'
 import { IColumn, IPagination, IRow, Table } from '@components/ui/tables'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { badge, paths } from '@utils'
 import { GetSubmissionsResponse, ISubmission } from '@interfaces'
 import { api } from '@api'
@@ -27,13 +26,9 @@ const columns: IColumn[] = [
 ]
 
 const SubmissionsPage = () => {
-  const { get: params } = useSearchParams()
-  const router = useRouter()
-
-  const page = Number(params('page') || 1)
-
   const [rows, setRows] = useState<IRow[]>([])
   const [pagination, setPagination] = useState<IPagination>()
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     const getPendingSubmissions = async () => {
@@ -56,10 +51,6 @@ const SubmissionsPage = () => {
     getPendingSubmissions()
   }, [page])
 
-  const handlePagination = (page: number) => {
-    router.push(`${doctor.home}?page=${page}`)
-  }
-
   if (!pagination) {
     return <></>
   }
@@ -69,7 +60,7 @@ const SubmissionsPage = () => {
       columns={columns}
       rows={rows}
       pagination={pagination}
-      handlePagination={handlePagination}
+      setPage={setPage}
     />
   )
 }

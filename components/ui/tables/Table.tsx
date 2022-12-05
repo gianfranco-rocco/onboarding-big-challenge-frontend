@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { IHandlePagination, IPagination, Pagination } from '@components/ui/tables'
+import { IPagination, Pagination } from '@components/ui/tables'
 
 export interface IRow {
   [key: string]: any;
@@ -17,10 +17,10 @@ interface Props {
   rows: IRow[];
   noRowsText?: string;
   pagination: IPagination;
-  handlePagination: IHandlePagination;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export const Table: FC<Props> = ({ columns, rows, noRowsText, pagination, handlePagination }) => {
+export const Table: FC<Props> = ({ columns, rows, noRowsText, pagination, setPage }) => {
   return (
     <div className='px-4 sm:px-6 lg:px-8'>
       <div className='mt-8 flex flex-col'>
@@ -57,7 +57,7 @@ export const Table: FC<Props> = ({ columns, rows, noRowsText, pagination, handle
                   }
                 </tbody>
               </table>
-              {pagination.meta.total > 0 && <Pagination pagination={pagination} handlePagination={handlePagination} />}
+              {pagination.meta.total > 0 && <Pagination pagination={pagination} setPage={setPage} />}
             </div>
           </div>
         </div>

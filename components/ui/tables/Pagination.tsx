@@ -26,10 +26,10 @@ export type IHandlePagination = (page: number) => void;
 
 interface Props {
   pagination: IPagination;
-  handlePagination: IHandlePagination;
+  setPage: React.Dispatch<React.SetStateAction<number>>
 }
 
-export const Pagination: FC<Props> = ({ pagination, handlePagination }) => {
+export const Pagination: FC<Props> = ({ pagination, setPage }) => {
   const {
     meta: {
       total,
@@ -44,11 +44,11 @@ export const Pagination: FC<Props> = ({ pagination, handlePagination }) => {
   } = pagination
 
   const prevPage = () => {
-    handlePagination(currentPage - 1)
+    setPage(currentPage - 1)
   }
 
   const nextPage = () => {
-    handlePagination(currentPage + 1)
+    setPage(currentPage + 1)
   }
 
   return (
