@@ -14,12 +14,15 @@ import { IPatientInfo } from '@interfaces'
 
 const PatientProfilePage = () => {
   const [errors, setErrors] = useState({})
+  const [loading, setLoading] = useState(false)
 
   const { user, updatePatientInfo } = useContext(AuthContext)
 
   const toastConfig = toastUtils.config
 
   const onSubmit = async (formData: FieldValues) => {
+    setLoading(true)
+
     try {
       await updatePatientInfo(formData as IPatientInfo)
 
@@ -33,6 +36,8 @@ const PatientProfilePage = () => {
         toast.error('Something went wrong while attempting to update your information.', toastConfig)
       }
     }
+
+    setLoading(false)
   }
 
   return (
@@ -97,7 +102,13 @@ const PatientProfilePage = () => {
           }}
         />
 
-        <ButtonPrimary className='md:w-max w-full' type='submit'>Update profile</ButtonPrimary>
+        <ButtonPrimary 
+          className='md:w-max w-full' 
+          type='submit'
+          disabled={loading}
+        >
+          Update profile
+        </ButtonPrimary>
       </Form>
     </>
   )
