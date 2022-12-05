@@ -12,13 +12,6 @@ import { toast } from 'react-toastify'
 import { AuthContext } from '@context/auth'
 import { IPatientInfo } from '@interfaces'
 
-interface FormValues {
-  phoneNumber: string;
-  weight: string;
-  height: string;
-  symptoms: string;
-}
-
 const PatientProfilePage = () => {
   const [errors, setErrors] = useState({})
 
@@ -67,8 +60,8 @@ const PatientProfilePage = () => {
           name='phone'
           placeholder='(406) 555-0121'
           validations={{
-            required: 'This field is required.'
-            // validate: validations.validatePhoneNumber
+            required: 'This field is required.',
+            validate: validations.validatePhoneNumber
           }}
         />
 
