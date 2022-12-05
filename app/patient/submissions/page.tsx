@@ -4,11 +4,11 @@ import React, { useState, useEffect } from 'react'
 import { Badge } from '@components/ui/badges'
 import { Link } from '@components/ui/buttons'
 import { IColumn, IPagination, IRow, Table } from '@components/ui/tables'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { badge, paths } from '@utils'
 import { ISelectOption, Select } from '@components/ui/inputs'
 import { useMySubmissions } from '@hooks'
 import { ISubmission } from '@interfaces'
+import { SubmissionStatus } from '@types';
 
 const { patient } = paths
 
@@ -35,17 +35,14 @@ const submissionStatuses: ISelectOption[] = [
 ]
 
 const SubmissionsPage = () => {
-  const { get: params } = useSearchParams()
-  const router = useRouter()
-
-  const page = Number(params('page') || 1)
-
   const [rows, setRows] = useState<IRow[]>([])
   const [pagination, setPagination] = useState<IPagination>()
+  const [status, setStatus] = useState<SubmissionStatus>()
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
     const getSubmissions = async () => {
-      const { data, links, meta } = await useMySubmissions(page)
+      const { data, links, meta } = await useMySubmissions(page, status)
 
       setRows(data.map(({ id, title, doctor, created_at, status }: ISubmission) => ({
         id,
@@ -62,14 +59,14 @@ const SubmissionsPage = () => {
     }
 
     getSubmissions()
-  }, [page])
+  }, [page, status])
 
   const handleSubmissionStatusChange = (selected: ISelectOption) => {
-
+    setStatus(selected.id as SubmissionStatus)
   }
 
   const handlePagination = (page: number) => {
-    router.push(`${patient.home}?page=${page}`)
+    setPage(page)
   }
 
   if (!pagination) {
