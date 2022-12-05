@@ -33,13 +33,13 @@ const ResetPasswordPage = () => {
     const { email, password, token } = formData as FormValues
 
     try {
-      const { status } = await api.post('/reset-password', {
+      const { data: { message } } = await api.post('/reset-password', {
         email,
         password,
         token
       })
 
-      toast.success(status, toastUtils.config)
+      toast.success(message, toastUtils.config)
 
       return router.replace(paths.auth.login)
     } catch (err) {
