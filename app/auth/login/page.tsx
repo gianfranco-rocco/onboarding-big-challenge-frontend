@@ -8,7 +8,7 @@ import { validations, paths, toast as toastUtils } from '@utils'
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@context/auth'
 import { toast } from 'react-toastify'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 type FormValues = {
     email: string,
@@ -18,9 +18,15 @@ type FormValues = {
 const LoginPage = () => {
   const { login, user } = useContext(AuthContext)
 
+  const { get } = useSearchParams()
+
+  const verified = get('verified')
+
   const [loading, setLoading] = useState(false)
 
   const router = useRouter()
+
+  const toastConfig = toastUtils.config
 
   const onSubmit = async (formData: FieldValues) => {
     const { email, password } = formData as FormValues
@@ -32,17 +38,49 @@ const LoginPage = () => {
     if (success) {
       router.replace(paths[user!.roles[0].name].home)
     } else {
-      toast.error(message, toastUtils.config)
+      toast.error(message, toastConfig)
     }
 
     setLoading(false)
   }
 
-  useEffect(() => {
+  useEffect(() => {    
+    // if (verified !== undefined) {
+    //   switch(verified) {
+    //     case '0':
+    //       toast.error('Your account could not be verified.', toastConfig)
+    //       break;
+    //     case "1":
+    //       toast.success('Your account has been successfully verified.', toastConfig)
+    //       break;
+    //     case '2':
+    //       toast.success('Your account has already been verified.', toastConfig)
+    //       break;
+    //   }
+    // }
     if (user) {
-      router.replace(paths[user!.roles[0].name].home)
+      router.replace(paths[user.roles[0].name].home)
     }
   }, [user])
+
+  useEffect(() => {
+    return () => {
+      if (verified !== undefined) {
+        switch(verified) {
+          case '0':
+            toast.error('Your account could not be verified.', toastConfig)
+            break;
+          case '1':
+            toast.success('Your account has been successfully verified.', toastConfig)
+            break;
+          case '2':
+            toast.success('Your account has already been verified.', toastConfig)
+            break;
+        }
+      }
+    }
+  }, [verified])
+  
 
   return (
     <AuthForm
