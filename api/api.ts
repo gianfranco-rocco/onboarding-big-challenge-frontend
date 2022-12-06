@@ -8,9 +8,9 @@ const api = axios.create({
 api.interceptors.request.use(function (config: AxiosRequestConfig) {
   const token = Cookies.get('XSRF-TOKEN')
 
-    config.headers!.Authorization = `Bearer ${token}`
+  config.headers!.Authorization = `Bearer ${token}`
 
-    return config
+  return config
 })
 
 export default api
