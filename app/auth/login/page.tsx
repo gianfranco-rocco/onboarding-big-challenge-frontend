@@ -45,19 +45,6 @@ const LoginPage = () => {
   }
 
   useEffect(() => {    
-    // if (verified !== undefined) {
-    //   switch(verified) {
-    //     case '0':
-    //       toast.error('Your account could not be verified.', toastConfig)
-    //       break;
-    //     case "1":
-    //       toast.success('Your account has been successfully verified.', toastConfig)
-    //       break;
-    //     case '2':
-    //       toast.success('Your account has already been verified.', toastConfig)
-    //       break;
-    //   }
-    // }
     if (user) {
       router.replace(paths[user.roles[0].name].home)
     }
