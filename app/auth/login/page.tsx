@@ -15,6 +15,12 @@ type FormValues = {
     password: string,
 }
 
+enum VerifiedStatus {
+  notVerified = '0',
+  verified = '1',
+  alreadyVerified = '2'
+}
+
 const LoginPage = () => {
   const { login, user } = useContext(AuthContext)
 
@@ -54,13 +60,13 @@ const LoginPage = () => {
     return () => {
       if (verified !== undefined) {
         switch(verified) {
-          case '0':
+          case VerifiedStatus.notVerified:
             toast.error('Your account could not be verified.', toastConfig)
             break;
-          case '1':
+          case VerifiedStatus.verified:
             toast.success('Your account has been successfully verified.', toastConfig)
             break;
-          case '2':
+          case VerifiedStatus.alreadyVerified:
             toast.success('Your account has already been verified.', toastConfig)
             break;
         }
